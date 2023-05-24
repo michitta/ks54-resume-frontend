@@ -1,114 +1,54 @@
 "use client";
 
-import styles from '@/styles/admin.module.scss'
 import { useAuth } from '@/components/auth.context';
-import { useForm } from 'react-hook-form';
-import clsx from 'clsx';
-import { useEffect, useMemo, useState } from 'react';
+import { AsyncSelector, Selector } from '@/components/selector';
 import { usersService } from '@/services/users.service';
-
+import styles from '@/styles/admin.module.scss';
+import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 export default function Admin() {
-  const [data, setData] = useState(null);
+    const navigator = useRouter();
+    const [isLoad, setIsLoad] = useState(false);
 
-  useMemo(async () => {
-    // setData(await usersService.getById(1))
-  }, [data])
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { user, isLoading } = useAuth();
 
-  const { user } = useAuth();
-
-  const onSubmit = (data: any) => {
-    (data?.username && data?.password) && console.log(data);
-  };
-  return (
-    user &&
-    <main className={styles.main}>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        <div>
-          <p>Добро пожаловать в редактор резюме, {user.username}</p>
-        </div>
-        <div>
-          <div className={styles.data}>
+    return (
+        // !isLoading && user &&
+        <main className={styles.main}>
+            <header>
+                <button onClick={() => navigator.push("/")}>На главную</button>
+                <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 1L1 21" stroke="#333333" stroke-linecap="round" />
+                </svg>
+                <span>
+                    <p>Панель редактора резюме</p>
+                    <p>Добро пожаловать, {user?.username}!</p>
+                </span>
+            </header>
             <div>
-              <span className='flex flex-col gap-[10px]'>
-                <p>Надюков М.Р</p>
-                <p>Профессия: Программист</p>
-              </span>
-            </div>
-            <div>
-              <span>
-                <p>Год рождения</p>
-                <p>: 18.01.2004</p>
-              </span>
-              <span>
-                <p>Группа</p>
-                <p>: 2-ИСП11-19</p>
-              </span>
-              <span>
-                <p>Номер телефона</p>
-                <p>: +79268832840</p>
-              </span>
-            </div>
-            <div>
-              <span>
-                <p>Email</p>
-                <p>: uwu@uwu.uwu</p>
-              </span>
-              <span>
-                <p>Telegram</p>
-                <p>: @FluffyCuteOwO</p>
-              </span>
-              <span>
-                <p>Вод. Удостоверение</p>
-                <p>: Категория B</p>
-              </span>
-            </div>
-            <div>
-              <span>
-                <p>Факультет</p>
-                <p>: Сергеевский</p>
-              </span>
-              <span>
-                <p>Форма обучения</p>
-                <p>: Очная</p>
-              </span>
-              <span>
-                <p>Город проживания</p>
-                <p>: Москва</p>
-              </span>
-              <span>
-                <p>Год завершения обучения</p>
-                <p>: 2023</p>
-              </span>
-            </div>
-          </div>
-          <div>
-            <div>
+                <h1>Выберите параметры</h1>
+                <p>Введите данные в формы чтобы перейти к редактированию определённого резюме.</p>
+                <div>
+                    <div className={styles.top}>
+                        <AsyncSelector
+                            cacheOptions={true}
+                            placeholder={"Выберите группу"}
+                            defaultOptions={true}
+                            loadOptions={async () => {
+                                const data = await usersService.getGroups();
+                                return data.map((group: string, index: number) => ({
+                                    value: index,
+                                    label: group,
+                                }));
+                            }}
+                        />
+                    </div>
+                    <button type="submit" className={styles.button}>Найти резюме</button>
+                </div>
 
             </div>
-            <div>
-
-            </div>
-            <div>
-
-            </div>
-          </div>
-          <div>
-            <div>
-
-            </div>
-            <div>
-
-            </div>
-            <div>
-
-            </div>
-            <div>
-
-            </div>
-          </div>
-        </div>
-      </form>
-    </main>
-  )
+        </main>
+    )
 }
