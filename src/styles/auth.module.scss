@@ -1,14 +1,23 @@
 .form {
-  @apply flex flex-col rounded-[20px] p-[20px] bg-[#121212];
+  @apply flex flex-col rounded-[20px] p-[20px] bg-[#121212] gap-[20px];
   border: 1px solid #333333;
   animation: 0.5s fadeIn ease-in-out;
 
   > header {
-    @apply flex gap-[20px];
+    @apply flex gap-[20px] items-center;
 
     > button {
-      @apply bg-[#1E1E1E] rounded-[12px] text-white text-[16px] leading-[12px];
+      @apply bg-[#1E1E1E] rounded-[12px] font-extrabold text-white text-[16px] leading-[12px];
       padding: 14px 20px;
+
+      &:hover {
+        @apply bg-[#222222];
+      }
+
+      &:active {
+        @apply bg-[#252525];
+        outline: 1px solid;
+      }
     }
 
     > p {
@@ -17,24 +26,51 @@
   }
 
   > div {
-    @apply flex gap-[40px];
+    @apply flex flex-col gap-[40px] justify-center items-center;
+
+    > div {
+      @apply flex flex-col gap-[40px] items-center;
+    }
 
     > h1 {
       @apply text-white leading-[24px] font-extrabold text-[32px];
     }
 
     > p {
-      @apply text-[#FFFFFFBF] font-extrabold text-[16px];
+      @apply text-[#FFFFFFBF] font-semibold text-[16px] max-w-[380px] text-center;
     }
   }
 }
 
 .button {
-  @apply transition-all text-[16px] bg-white text-[#000000] font-bold rounded-xl w-[275px] h-[52px];
+  @apply text-[16px] bg-white text-[#000000] font-bold rounded-xl w-[275px] h-[52px];
 
   &:hover {
-    @apply transition-all text-white bg-transparent;
+    @apply text-white bg-transparent;
     border: 1px solid #ffffff;
+  }
+}
+
+.top,
+.bottom {
+  @apply flex flex-col gap-[20px] items-center;
+}
+
+.bottom {
+  > span {
+    @apply flex flex-col gap-[10px] items-center;
+
+    > a {
+      @apply text-[#FFFFFF80] font-semibold text-[16px] leading-[12px] cursor-pointer;
+
+      &:hover {
+        @apply text-[#FFFFFFBF];
+      }
+
+      &:active {
+        @apply text-white;
+      }
+    }
   }
 }
 
