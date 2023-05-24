@@ -1,0 +1,73 @@
+.form {
+  @apply flex flex-col rounded-[20px] p-[20px] bg-[#121212];
+  border: 1px solid #333333;
+  animation: 0.5s fadeIn ease-in-out;
+
+  > header {
+    @apply flex gap-[20px];
+
+    > button {
+      @apply bg-[#1E1E1E] rounded-[12px] text-white text-[16px] leading-[12px];
+      padding: 14px 20px;
+    }
+
+    > p {
+      @apply font-extrabold text-[16px] text-[#FFFFFF80] leading-[12px];
+    }
+  }
+
+  > div {
+    @apply flex gap-[40px];
+
+    > h1 {
+      @apply text-white leading-[24px] font-extrabold text-[32px];
+    }
+
+    > p {
+      @apply text-[#FFFFFFBF] font-extrabold text-[16px];
+    }
+  }
+}
+
+.button {
+  @apply transition-all text-[16px] bg-white text-[#000000] font-bold rounded-xl w-[275px] h-[52px];
+
+  &:hover {
+    @apply transition-all text-white bg-transparent;
+    border: 1px solid #ffffff;
+  }
+}
+
+.input {
+  @apply bg-[#1e1e1e] w-[275px] h-[52px] rounded-xl text-[#FFFFFF80] font-bold text-base;
+  border: 1px solid #333333;
+  padding: 0 20px;
+
+  &::placeholder {
+    @apply font-semibold text-[#ffffff80];
+  }
+
+  &:focus {
+    outline: none;
+    color: #ffffff;
+    background: #222222;
+  }
+}
+
+.error {
+  @apply text-[#FF463CBF];
+  border: 1px solid #ff463cbf;
+
+  &::placeholder {
+    @apply text-[#FF463CBF];
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

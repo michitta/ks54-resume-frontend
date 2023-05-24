@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./Manrope-VariableFont_wght.ttf");
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  @apply p-0 m-0 box-border border-none select-none;
+  color: #fff;
+  font-family: "Manrope";
+  user-select: none;
+  font-weight: normal;
+}
+
+body {
+  @apply flex items-center justify-center overflow-x-hidden;
+  height: 100vh;
+  width: 100vw;
+  background: url("./noise.png"),
+    linear-gradient(
+      65.5deg,
+      rgba(255, 181, 158, 0.08) 0%,
+      rgba(158, 255, 249, 0.08) 34.37%,
+      rgba(224, 158, 255, 0.08) 68.75%,
+      rgba(158, 255, 168, 0.08) 100%
+    ),
+    #000000;
+}

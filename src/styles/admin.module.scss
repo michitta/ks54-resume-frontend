@@ -1,0 +1,57 @@
+.main {
+  @apply w-full h-full flex gap-[40px] justify-center items-center p-[100px];
+}
+
+.form {
+  @apply flex w-full h-full flex-col items-center justify-center rounded-[20px] bg-[#1e1e1e];
+  border: 1px solid #333333;
+
+  > div {
+    &:first-child {
+      @apply flex w-full p-[20px] items-center justify-center bg-[#222222] rounded-t-[20px] leading-[16px];
+      border: 1px solid #333333;
+    }
+
+    &:last-child {
+      @apply flex flex-col w-full h-full gap-[20px] pb-[20px];
+
+      > div {
+        &:first-child {
+          @apply flex w-full gap-[20px];
+          padding: 40px 20px;
+        }
+
+        &:nth-child(2) {
+          @apply flex w-full gap-[20px];
+          padding: 40px 20px;
+        }
+
+        &:last-child {
+          @apply flex w-full h-full gap-[20px];
+          padding: 40px 20px;
+        }
+      }
+    }
+  }
+}
+
+.data {
+  @apply flex justify-center items-center;
+  border: 1px solid #333333;
+
+  div {
+    @apply flex flex-col w-full gap-[10px];
+
+    span {
+      @apply flex;
+      p {
+        &:first-child {
+          @apply text-[#FFFFFFBF] leading-[16px];
+        }
+        &:last-child {
+          @apply text-[#FFFFFF80] leading-[16px];
+        }
+      }
+    }
+  }
+}
