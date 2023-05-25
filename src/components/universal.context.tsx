@@ -14,7 +14,8 @@ import { useRouter, usePathname } from "next/navigation";
 
 interface IUser {
     uuid: number;
-    username: string;
+    fullName: string;
+    admin: boolean;
 }
 
 enum driverLicences {
@@ -82,15 +83,20 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
     const router = useRouter();
     const path = usePathname();
 
-    // useEffect(() => {
-    //     if (!user && !isLoading) reFetch();
-    // }, []);
+    useEffect(() => {
+        if (!user) reFetch();
+    }, []);
 
-    // useEffect(() => {
-    //     if (user && !isLoading && path.includes("/auth"))
-    //         if (user && !isLoading) router.push("/");
-    //     if (!user && !isLoading) router.push("auth/login");
-    // }, [user, isLoading]);
+    useEffect(() => {
+        if (!user && !isLoading && path.includes('admin')) router.push('/auth/login');
+        if (user && !isLoading && path.includes('auth')) {
+            if (user.admin) {
+                router.push('/admin')
+            } else {
+                router.push('/cabinet')
+            }
+        };
+    }, [user, isLoading, path]);
 
     const login = async (email: string, password: string) => {
         const req = await authService.login(email, password);
@@ -131,7 +137,7 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
                 isLoading,
             }}
         >
-            {children}
+            {!isLoading && children}
         </UniversalContext.Provider>
     );
 };
