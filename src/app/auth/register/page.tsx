@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from '@/components/auth.context';
+import { useUniversalContext } from '@/components/universal.context';
 import styles from '@/styles/auth.module.scss';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -9,9 +9,12 @@ export default function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigator = useRouter();
 
-    const { login, isLoading } = useAuth();
+    const { login, isLoading, reg } = useUniversalContext();
     const onSubmit = (data: any) => {
-        (data?.fullName && data?.email && data?.password) && login(data);
+        if (data) {
+            console.log(data)
+            reg(data.fullName, data.email, data.password);
+        }
     };
 
     return (
@@ -36,7 +39,7 @@ export default function Register() {
                             )}
                             type="text"
                             defaultValue={""}
-                            placeholder="Введите фамилию и имя"
+                            placeholder="Введите ФИО (Абоб А.Р.)"
                             {...register(`fullName`, { required: true, maxLength: 100 })}
                         />
                         <input

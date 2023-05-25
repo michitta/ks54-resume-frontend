@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from '@/components/auth.context';
+import { useUniversalContext } from '@/components/universal.context';
 import styles from '@/styles/auth.module.scss';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -9,9 +9,9 @@ export default function ForgotPass() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigator = useRouter();
 
-    const { login, isLoading } = useAuth();
+    const { login, isLoading } = useUniversalContext();
     const onSubmit = (data: any) => {
-        (data?.username && data?.password) && login(data);
+        // (data?.username && data?.password) && login(data);
     };
 
     return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from '@/components/auth.context';
+import { useUniversalContext } from '@/components/universal.context';
 import styles from '@/styles/auth.module.scss';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
@@ -9,9 +9,9 @@ export default function LogIn() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigator = useRouter();
 
-    const { login, isLoading } = useAuth();
+    const { login, isLoading } = useUniversalContext();
     const onSubmit = (data: any) => {
-        (data?.username && data?.password) && login(data);
+        if (data) login(data.email, data.password);
     };
 
     return (
@@ -54,7 +54,7 @@ export default function LogIn() {
                         <button type="submit" className={styles.button}>Войти в аккаунт</button>
                         <span>
                             <a onClick={() => navigator.push('auth/register')}>У Вас нет аккаунта?</a>
-                            <a onClick={() => navigator.push('auth/forgotPass')}>Забыли пароль?</a>
+                            {/* <a onClick={() => navigator.push('auth/forgotPass')}>Забыли пароль?</a> */}
                         </span>
                     </div>
                 </div>

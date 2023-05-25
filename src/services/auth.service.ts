@@ -1,17 +1,17 @@
 import api from "../utils/api";
 
 export const authService = {
-  async login(username: string, password: string) {
+  async login(email: string, password: string) {
     return api.post("/auth/login", {
-      username,
+      email,
       password,
     });
   },
 
-  async register(email: string, username: string, password: string) {
+  async register(fullName: string, email: string, password: string) {
     return api.post("/auth/register", {
+      fullName,
       email,
-      username,
       password,
     });
   },

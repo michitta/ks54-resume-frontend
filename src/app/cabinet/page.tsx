@@ -6,7 +6,6 @@ import { usersService } from '@/services/users.service';
 import styles from '@/styles/admin.module.scss';
 import { loadStudents } from '@/types/admin.types';
 import { useRouter } from 'next/navigation';
-import { studentsService } from '@/services/students.service';
 export default function Admin() {
     const navigator = useRouter();
 
@@ -35,7 +34,7 @@ export default function Admin() {
                             placeholder={"Введите фамилию студента"}
                             defaultOptions={true}
                             loadOptions={async (inputValue: string) => {
-                                const data: loadStudents[] = await studentsService.getBySurName(inputValue);
+                                const data: loadStudents[] = await usersService.getBySurName(inputValue);
                                 return data.map((st) => ({
                                     value: st.uuid,
                                     label: st.fullName,
@@ -43,16 +42,14 @@ export default function Admin() {
                             }}
                             onChange={async (value) => {
                                 if (value) {
-                                    const data: loadStudents = await studentsService.getById(value?.value)
+                                    const data: loadStudents = await usersService.getById(value?.value)
                                     setStudent(data);
                                 }
                             }}
                         />
                     </div>
                     <button type="submit" className={styles.button} onClick={() => {
-                        if (student) {
-                            navigator.push(`/admin/edit`);
-                        }
+                        student && navigator.push(`/admin/edit`);
                     }}>Найти резюме</button>
                 </div>
             </div>
