@@ -9,18 +9,18 @@ export default function LogIn() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigator = useRouter();
 
-    const { login, isLoading } = useUniversalContext();
+    const { user, login, isLoading } = useUniversalContext();
     const onSubmit = (data: any) => {
         if (data) login(data.email, data.password);
     };
 
     return (
-        !isLoading &&
+        !isLoading && !user &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <header>
                 <button onClick={() => navigator.back()}>Назад</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 1L1 21" stroke="#333333" stroke-linecap="round" />
+                    <path d="M1 1L1 21" stroke="#333333" strokeLinecap="round" />
                 </svg>
                 <p>Вход в аккаунт</p>
             </header>
@@ -47,14 +47,14 @@ export default function LogIn() {
                             type="password"
                             defaultValue={""}
                             placeholder="Введите пароль"
-                            {...register(`password`, { required: true, maxLength: 100 })}
+                            {...register(`password`, { required: true, maxLength: 40, minLength: 10 })}
                         />
                     </div>
                     <div className={styles.bottom}>
                         <button type="submit" className={styles.button}>Войти в аккаунт</button>
                         <span>
                             <a onClick={() => navigator.push('auth/register')}>У Вас нет аккаунта?</a>
-                            {/* <a onClick={() => navigator.push('auth/forgotPass')}>Забыли пароль?</a> */}
+                            <a onClick={() => navigator.push('auth/forgotPass')}>Забыли пароль?</a>
                         </span>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
-import { toast } from "react-hot-toast";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { error, success } from "./toaster";
 
 const api = axios.create({
   baseURL: "http://localhost:3003/api/v1",
@@ -8,10 +8,18 @@ const api = axios.create({
 
 api.interceptors.response.use(
   (res) => {
+    if (res.data.message && (res.status == 200 || res.status == 201))
+      success(res.data.message);
     return res;
   },
-  ({ request, response }) => {
-    response.status != 401 && toast.error(response?.data?.message);
+  ({ response }: { response: AxiosResponse }) => {
+    if (response.status != 401) {
+      error(
+        response?.data?.message
+          ? response?.data?.message
+          : "Произошла непредвиденная ошибка"
+      );
+    }
     return null;
   }
 );

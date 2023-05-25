@@ -8,6 +8,10 @@ export const Selector: FC<StateManagerProps> = (data) => {
     <Select
       {...data}
       styles={{
+        container: (defaultStyles) => ({
+          ...defaultStyles,
+          width: "fit-content"
+        }),
         option: (defaultStyles, state) => ({
           ...defaultStyles,
           borderRadius: "12px",
@@ -20,10 +24,9 @@ export const Selector: FC<StateManagerProps> = (data) => {
         }),
         control: (baseStyles, state) => ({
           ...baseStyles,
-          width: "275px",
           cursor: "pointer",
-          height: "52px",
-          paddingLeft: "6px",
+          padding: "4px",
+          width: "fit-content",
           background: "#1E1E1E",
           border: "1px solid #333333",
           borderRadius: "12px",

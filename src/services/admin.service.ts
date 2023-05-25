@@ -1,11 +1,19 @@
 import api from "../utils/api";
 
 export const adminService = {
-  async getBySurName(surName: string) {
-    return api.get(`/users/bySurName/${surName}`).then((res) => res?.data);
+  async searchStudent(fullName: string) {
+    return api.get(`/students/search/${fullName}`).then((res) => res?.data);
   },
 
-  async getById(uuid: string) {
-    return api.get(`/users/${uuid}`).then((res) => res?.data);
+  async getStudent(uuid: string) {
+    return api.get(`/students/${uuid}`).then((res) => res?.data);
+  },
+
+  async setStudent(uuid: string, data: any) {
+    return api
+      .post(`/students/${uuid}`, {
+        data: data,
+      })
+      .then((res) => res?.data);
   },
 };

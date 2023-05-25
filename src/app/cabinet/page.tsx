@@ -1,8 +1,7 @@
 "use client";
 
 import { useUniversalContext } from '@/components/universal.context';
-import { AsyncSelector, Selector } from '@/components/selector';
-import { usersService } from '@/services/users.service';
+import { AsyncSelector } from '@/components/selector';
 import styles from '@/styles/admin.module.scss';
 import { loadStudents } from '@/types/admin.types';
 import { useRouter } from 'next/navigation';
@@ -12,7 +11,7 @@ export default function Admin() {
     const { user, student, setStudent, isLoading } = useUniversalContext();
 
     return (
-        // !isLoading && user &&
+        !isLoading && user &&
         <main className={styles.main}>
             <header>
                 <button onClick={() => navigator.push("/")}>На главную</button>
@@ -21,7 +20,7 @@ export default function Admin() {
                 </svg>
                 <span>
                     <p>Панель редактора резюме</p>
-                    <p>Добро пожаловать, {user?.username}!</p>
+                    <p>Добро пожаловать, {user?.fullName}!</p>
                 </span>
             </header>
             <div>
@@ -29,7 +28,7 @@ export default function Admin() {
                 <p>Введите данные в формы чтобы перейти к редактированию определённого резюме.</p>
                 <div>
                     <div className={styles.top}>
-                        <AsyncSelector
+                        {/* <AsyncSelector
                             cacheOptions={true}
                             placeholder={"Введите фамилию студента"}
                             defaultOptions={true}
@@ -46,7 +45,7 @@ export default function Admin() {
                                     setStudent(data);
                                 }
                             }}
-                        />
+                        /> */}
                     </div>
                     <button type="submit" className={styles.button} onClick={() => {
                         student && navigator.push(`/admin/edit`);

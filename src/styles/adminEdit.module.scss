@@ -1,4 +1,4 @@
-.main {
+.form {
   @apply flex flex-col rounded-[20px] p-[20px] bg-[#121212] gap-[20px];
   border: 1px solid #333333;
   animation: 0.5s fadeIn ease-in-out;
@@ -25,7 +25,7 @@
     }
   }
 
-  > form {
+  > main {
     @apply flex flex-col gap-[40px] justify-center items-center rounded-[20px] p-[20px];
     border: 1px solid #333333;
 
@@ -36,10 +36,22 @@
           @apply flex justify-between gap-[20px];
 
           > div {
-            @apply flex flex-col gap-[10px];
+            @apply flex flex-col gap-[2px] justify-center;
+
+            > span {
+              > p {
+                &:first-child {
+                  @apply font-bold text-[20px] text-white;
+                }
+
+                &:last-child {
+                  @apply font-bold text-[16px] text-[#FFFFFFBF];
+                }
+              }
+            }
 
             > p {
-              @apply font-bold text-[20px] text-[#FFFFFFBF] leading-[16px];
+              @apply font-bold text-[16px] text-[#FFFFFFBF];
             }
           }
         }
@@ -84,12 +96,10 @@
 }
 
 .input {
-  @apply bg-[#1e1e1e] w-[275px] h-[52px] rounded-xl text-[#FFFFFF80] font-bold text-base;
-  border: 1px solid #333333;
-  padding: 0 20px;
+  @apply max-w-[200px] bg-transparent text-[#FFFFFF80] font-bold text-base;
 
   &::placeholder {
-    @apply font-semibold text-[#ffffff80];
+    @apply font-semibold text-[#FFFFFF40];
   }
 
   &:focus {

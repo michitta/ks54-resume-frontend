@@ -9,8 +9,8 @@ import {
     useState,
 } from "react";
 import { authService } from "@/services/auth.service";
-import { toast } from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
+import { success } from "@/utils/toaster";
 
 interface IUser {
     uuid: number;
@@ -49,7 +49,7 @@ interface IStudent {
     driverLicence: driverLicences;
     educationForm: educationForms;
     city: string;
-    endYear: number;
+    endYear: string;
     professionalSkills: string[];
     socialSkills: string[];
     additionalSkills: string[];
@@ -88,8 +88,9 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        if (!user && !isLoading && path.includes('admin')) router.push('/auth/login');
+        if (!user && !isLoading) if (!path.includes('auth') && path != "/") router.push('/auth/login')
         if (user && !isLoading && path.includes('auth')) {
+            console.log(user.admin)
             if (user.admin) {
                 router.push('/admin')
             } else {
@@ -102,7 +103,7 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
         const req = await authService.login(email, password);
         if (req) {
             await reFetch();
-            toast.success("Вы успешно авторизовались");
+            success("Вы успешно авторизовались");
         } else {
         }
     };
@@ -111,7 +112,7 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
         const req = await authService.register(fullName, email, password);
         if (req) {
             await reFetch();
-            toast.success("Вы успешно зарегистрировались");
+            success("Вы успешно зарегистрировались");
         } else {
         }
     };
@@ -137,7 +138,7 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
                 isLoading,
             }}
         >
-            {!isLoading && children}
+            {children}
         </UniversalContext.Provider>
     );
 };

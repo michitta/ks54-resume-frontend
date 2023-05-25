@@ -1,3 +1,4 @@
+import { error } from "@/utils/toaster";
 import api from "../utils/api";
 
 export const authService = {
@@ -16,10 +17,31 @@ export const authService = {
     });
   },
 
-  async forgotPass(email: string) {
-    return api.post("/auth/forgotPass", {
-      email,
+  async logout() {
+    return await api.post("/auth/logout", {
+      withCredentials: true,
     });
+  },
+
+  async recoveryPass(email: string, password: string) {
+    const { data } = await api
+      .post("/auth/recovery", {
+        email,
+        password,
+      })
+      .catch((e) => {
+        error(
+          "Возникла ошибка при восстановлении пароля: \n" +
+            e.response.data.message
+        );
+        return {
+          data: null,
+        };
+      });
+    if (data) {
+      return data;
+    }
+    return null;
   },
 
   async me() {

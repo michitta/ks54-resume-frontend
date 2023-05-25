@@ -29,7 +29,7 @@ export type loadStudents = {
   driverLicence: driverLicences;
   educationForm: educationForms;
   city: string;
-  endYear: number;
+  endYear: string;
   professionalSkills: string[];
   socialSkills: string[];
   additionalSkills: string[];
