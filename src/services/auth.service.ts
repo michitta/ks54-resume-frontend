@@ -18,36 +18,19 @@ export const authService = {
   },
 
   async logout() {
-    return await api.post("/auth/logout", {
+    return api.post("/auth/logout", {
       withCredentials: true,
     });
   },
 
   async recoveryPass(email: string, password: string) {
-    const { data } = await api
-      .post("/auth/recovery", {
-        email,
-        password,
-      })
-      .catch((e) => {
-        error(
-          "Возникла ошибка при восстановлении пароля: \n" +
-            e.response.data.message
-        );
-        return {
-          data: null,
-        };
-      });
-    if (data) {
-      return data;
-    }
-    return null;
+    return api.post("/auth/recovery", {
+      email,
+      password,
+    });
   },
 
   async me() {
-    return api
-      .get("/auth/@me")
-      .then((res) => res.data)
-      .catch(() => null);
+    return api.get("/auth/@me");
   },
 };

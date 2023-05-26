@@ -13,7 +13,7 @@ api.interceptors.response.use(
     return res;
   },
   ({ response }: { response: AxiosResponse }) => {
-    if (response.status != 401) {
+    if (response?.status != 401) {
       error(
         response?.data?.message
           ? response?.data?.message

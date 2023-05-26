@@ -10,31 +10,12 @@ import {
 } from "react";
 import { authService } from "@/services/auth.service";
 import { useRouter, usePathname } from "next/navigation";
-import { success } from "@/utils/toaster";
+import { error, success } from "@/utils/toaster";
 
 interface IUser {
     uuid: number;
     fullName: string;
     admin: boolean;
-}
-
-enum driverLicences {
-    A,
-    B,
-    BE,
-    C,
-    CE,
-    D,
-    DE,
-    M,
-    TM,
-    TB,
-}
-
-enum educationForms {
-    fullTime,
-    partTime,
-    selfStudy,
 }
 
 interface IStudent {
@@ -45,19 +26,19 @@ interface IStudent {
     group: string;
     phone: string;
     email: string;
-    telegram?: string;
-    driverLicence: driverLicences;
-    educationForm: educationForms;
+    telegram: string;
+    driverLicence: string;
+    educationForm: string;
     city: string;
     endYear: string;
-    professionalSkills: string[];
-    socialSkills: string[];
-    additionalSkills: string[];
+    professionalSkills: string;
+    socialSkills: string;
+    additionalSkills: string;
     additionalInfo: string;
-    workExperience?: string;
-    educations: string[];
-    courses: string[];
-    awards: string[];
+    workExperience: string;
+    educations: string;
+    courses: string;
+    awards: string;
 }
 
 type UniversalContextData = {
@@ -67,8 +48,10 @@ type UniversalContextData = {
     setStudent: (student: IStudent | null) => void;
     isLoading: boolean;
     login: (email: string, password: string) => Promise<void>;
+    logout: () => Promise<void>;
     reg: (fullName: string, email: string, password: string) => Promise<void>;
     reFetch: () => Promise<void>;
+    recovery: (email: string, password: string) => Promise<void>
 };
 
 export const UniversalContext = createContext({} as UniversalContextData);
@@ -80,7 +63,7 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
     const [student, setStudent] = useState<IStudent | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const router = useRouter();
+    const navigator = useRouter();
     const path = usePathname();
 
     useEffect(() => {
@@ -88,41 +71,51 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        if (!user && !isLoading) if (!path.includes('auth') && path != "/") router.push('/auth/login')
+        if (!user && !isLoading) if (!path.includes('auth') && path != "/") navigator.push('/auth/login')
         if (user && !isLoading && path.includes('auth')) {
             console.log(user.admin)
             if (user.admin) {
-                router.push('/admin')
+                navigator.push('/admin')
             } else {
-                router.push('/cabinet')
+                navigator.push('/cabinet')
             }
         };
     }, [user, isLoading, path]);
 
     const login = async (email: string, password: string) => {
+        setIsLoading(true);
         const req = await authService.login(email, password);
-        if (req) {
-            await reFetch();
-            success("Вы успешно авторизовались");
-        } else {
-        }
+        if (req) await reFetch();
+        setIsLoading(false);
     };
 
     const reg = async (fullName: string, email: string, password: string) => {
+        setIsLoading(true);
         const req = await authService.register(fullName, email, password);
-        if (req) {
-            await reFetch();
-            success("Вы успешно зарегистрировались");
-        } else {
-        }
+        if (req) await reFetch();
+        setIsLoading(false);
     };
+
+    const logout = async () => {
+        setIsLoading(true);
+        const req = await authService.logout();
+        if (req) await reFetch();
+        setIsLoading(false);
+    }
+
+    const recovery = async (email: string, password: string) => {
+        setIsLoading(true);
+        const req = await authService.recoveryPass(email, password);
+        if (req) navigator.push('/auth/login');
+        setIsLoading(false);
+    }
 
     const reFetch = async () => {
         setIsLoading(true);
         const res = await authService.me();
         setIsLoading(false);
         if (!res) return;
-        setUser(res);
+        setUser(res.data);
     };
 
     return (
@@ -133,6 +126,8 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
                 student,
                 setStudent,
                 login,
+                logout,
+                recovery,
                 reg,
                 reFetch,
                 isLoading,

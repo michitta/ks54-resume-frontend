@@ -10,16 +10,16 @@ export default function ForgotPass() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigator = useRouter();
 
-    const { user, login, isLoading } = useUniversalContext();
+    const { user, login, isLoading, recovery } = useUniversalContext();
     const onSubmit = async (data: any) => {
-        if (data) await authService.recoveryPass(data.email, data.password);
+        if (data) await recovery(data.email, data.password);
     };
 
     return (
-        !isLoading && !user &&
+        !user &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <header>
-                <button onClick={() => navigator.back()}>Назад</button>
+                <button type='button' onClick={() => navigator.back()}>Назад</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L1 21" stroke="#333333" strokeLinecap="round" />
                 </svg>
@@ -52,7 +52,9 @@ export default function ForgotPass() {
                         />
                     </div>
                     <div className={styles.bottom}>
-                        <button type="submit" className={styles.button}>Восстановить доступ</button>
+                        <button type="submit" className={styles.button} disabled={isLoading}>{isLoading ? (
+                            <span></span>
+                        ) : "Восстановить доступ"}</button>
                         <span>
                             <a onClick={() => navigator.push('auth/login')}>Вспомнили пароль?</a>
                         </span>

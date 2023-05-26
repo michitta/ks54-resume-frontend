@@ -21,7 +21,7 @@ export default function Register() {
         !isLoading && !user &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <header>
-                <button onClick={() => navigator.back()}>Назад</button>
+                <button type='button' onClick={() => navigator.back()}>Назад</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L1 21" stroke="#333333" strokeLinecap="round" />
                 </svg>
@@ -64,7 +64,9 @@ export default function Register() {
                         />
                     </div>
                     <div className={styles.bottom}>
-                        <button type="submit" className={styles.button}>Создать аккаунт</button>
+                        <button type="submit" className={styles.button} disabled={isLoading}>{isLoading ? (
+                            <span></span>
+                        ) : "Создать аккаунт"}</button>
                         <span>
                             <a onClick={() => navigator.push('auth/login')}>У Вас уже есть аккаунт?</a>
                         </span>

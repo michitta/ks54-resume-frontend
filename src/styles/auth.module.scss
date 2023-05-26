@@ -43,11 +43,29 @@
 }
 
 .button {
-  @apply text-[16px] bg-white text-[#000000] font-bold rounded-xl w-[275px] h-[52px];
+  //@apply flex justify-center items-center w-[276px] h-[40px] bg-[#1E1F1FBF] rounded-xl text-white text-sm font-bold;
+  @apply flex justify-center items-center text-[16px] bg-white text-[#000000] font-bold rounded-xl w-[275px] h-[52px];
+
+  > span {
+    @apply w-4 h-4 rounded-full;
+    border: 2px solid #000;
+    border-bottom-color: transparent;
+    animation: rotation 1s linear infinite;
+  }
 
   &:hover {
     @apply text-white bg-transparent;
     border: 1px solid #ffffff;
+
+    > span {
+      border: 2px solid #fff;
+      border-bottom-color: transparent;
+    }
+  }
+
+  &:active {
+    @apply bg-[#262729BF];
+    border: 1px solid #ffffff1f;
   }
 }
 
@@ -105,5 +123,14 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
