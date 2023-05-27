@@ -3,13 +3,19 @@
 import { useUniversalContext } from '@/components/universal.context';
 import styles from '@/styles/auth.module.scss';
 import clsx from 'clsx';
+import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+
+export const metadata: Metadata = {
+    title: "Регистрация аккаунт"
+};
+
 export default function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const router = useRouter();
 
-    const { isLoading, reg } = useUniversalContext();
+    const { user, isLoading, reg } = useUniversalContext();
     const onSubmit = (data: any) => {
         if (data) {
             reg(data.fullName, data.email, data.password);
@@ -17,6 +23,7 @@ export default function Register() {
     };
 
     return (
+        !isLoading && !user &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <header>
                 <button type='button' onClick={() => router.back()}>Назад</button>

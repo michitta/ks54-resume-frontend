@@ -1,21 +1,27 @@
 "use client";
 
 import { useUniversalContext } from '@/components/universal.context';
-import { authService } from '@/services/auth.service';
 import styles from '@/styles/auth.module.scss';
 import clsx from 'clsx';
+import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+
+export const metadata: Metadata = {
+    title: "Восстановление доступа"
+};
+
 export default function ForgotPass() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const router = useRouter();
 
-    const { user, login, isLoading, recovery } = useUniversalContext();
+    const { user, isLoading, recovery } = useUniversalContext();
     const onSubmit = async (data: any) => {
         if (data) await recovery(data.email, data.password);
     };
 
     return (
+        !isLoading && !user &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <header>
                 <button type='button' onClick={() => router.back()}>Назад</button>

@@ -80,7 +80,15 @@
               @apply flex flex-col gap-[10px];
 
               > p {
-                @apply font-bold text-[16px] text-[#FFFFFFBF];
+                @apply font-bold text-[16px];
+
+                &:first-child {
+                  @apply text-[#FFFFFFBF];
+                }
+
+                &:last-child {
+                  @apply text-[#FFFFFF80];
+                }
               }
             }
           }

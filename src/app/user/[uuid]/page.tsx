@@ -6,10 +6,18 @@ import styles from '@/styles/user.module.scss';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Резюме студента"
+};
+
 export default function User({ params }: any) {
     const router = useRouter();
 
     const [student, setStudent] = useState<IStudent | null>();
+
+    const [icon, setIcon] = useState(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
 
     useMemo(async () => {
         setStudent(await usersService.getStudent(params.uuid))
@@ -33,7 +41,8 @@ export default function User({ params }: any) {
                                 width={60}
                                 height={60}
                                 alt="User head"
-                                src={`https://cdn.vaultcommunity.net/hackaton/${params.uuid}.png`}
+                                src={icon}
+                                onError={() => setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png?lastModified=${Date.now()}`)}
                                 className="rounded-full"
                                 quality={100}
                                 priority
@@ -93,19 +102,19 @@ export default function User({ params }: any) {
                         <div>
                             <span>
                                 <p>Место практики: </p>
-                                <p>{student.practiceName}</p>
+                                <p>{student.practiceName ? student.practiceName : "не указано"}</p>
                             </span>
                             <span>
-                                <p>Практикуется: </p>
-                                <p>{student.practiceTime}</p>
+                                <p>Практикуется (время): </p>
+                                <p>{student.practiceTime ? student.practiceTime : "не указано"}</p>
                             </span>
                             <span>
                                 <p>Выполняет функции: </p>
-                                <p>{student.practiceFunctions}</p>
+                                <p>{student.practiceFunctions ? student.practiceFunctions : "не указано"}</p>
                             </span>
                             <span>
                                 <p>Проходит практику по специальности: </p>
-                                <p>{student.practiceByProfession}</p>
+                                <p>{student.practiceByProfession ? student.practiceByProfession : "не указано"}</p>
                             </span>
                         </div>
                         <div>
@@ -114,7 +123,7 @@ export default function User({ params }: any) {
                                 <p>{student.workName ? student.workName : "не указано"}</p>
                             </span>
                             <span>
-                                <p>Работает: </p>
+                                <p>Работает (время): </p>
                                 <p>{student.workTime ? student.workTime : "не указано"}</p>
                             </span>
                             <span>

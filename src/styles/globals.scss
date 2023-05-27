@@ -13,7 +13,7 @@ a {
 }
 
 html {
-  @apply max-h-fit scroll-smooth bg-cover bg-no-repeat;
+  @apply min-h-screen max-h-fit scroll-smooth bg-cover bg-no-repeat;
   background: url("./noise.png"),
     linear-gradient(
       65.5deg,
@@ -34,5 +34,5 @@ html {
 }
 
 body {
-  @apply w-full h-full flex flex-col items-center overflow-x-hidden justify-center p-[20px];
+  @apply w-full min-h-screen overflow-y-auto flex flex-col items-center overflow-x-hidden justify-center p-[20px];
 }

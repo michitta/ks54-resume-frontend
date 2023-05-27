@@ -3,12 +3,17 @@
 import { useUniversalContext } from '@/components/universal.context';
 import { adminService } from '@/services/admin.service';
 import styles from '@/styles/adminEdit.module.scss';
-import { success } from '@/utils/toaster';
+import { error, success } from '@/utils/toaster';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
-import { ChangeEvent, useCallback } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Панель редактирования резюме"
+};
 
 export default function AdminEdit() {
     const router = useRouter();
@@ -16,6 +21,9 @@ export default function AdminEdit() {
     const { user, student, setStudent, logout, isLoading } = useUniversalContext();
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ mode: 'onChange' });
+
+    const [icon, setIcon] = useState(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
+
     const onSubmit = async (data: any) => {
         await adminService.setStudent(student!.uuid, data);
         reset();
@@ -32,11 +40,15 @@ export default function AdminEdit() {
         async (event: ChangeEvent<HTMLInputElement>) => {
             let item = event.target.files![0];
             if (!item) return;
+            if (item.size > 1000000) {
+                error('Размер файла превышает 1мб');
+                return;
+            }
             let formData = new FormData();
             formData.append("file", item);
-            await usersService.changeIcon(formData);
+            await adminService.changeIcon(student!.uuid, formData);
+            setIcon(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
             router.refresh();
-            success("Иконка успешно изменена!");
         }, []
     );
 
@@ -46,7 +58,7 @@ export default function AdminEdit() {
     }
 
     return (
-        user?.admin && student &&
+        user && user.admin && student && !isLoading &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form} >
             <header>
                 <button type="button" onClick={() => router.back()}>Назад</button>
@@ -59,24 +71,25 @@ export default function AdminEdit() {
                 <button type="button" onClick={() => logout()}>Выйти</button>
                 <button type="button" onClick={() => {
                     navigator.clipboard
-                        .writeText('https://owocon.eu.org/user/' + user.uuid)
+                        .writeText('https://owocon.eu.org/user/' + student.uuid)
                         .then(() => success("Ссылка на резюме скопирована в буфер обмена!"));
                 }}>Поделиться</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L1 21" stroke="#333333" strokeLinecap="round" />
                 </svg>
-                <p>{student ? "Редактирование резюме" : "Создание резюме"} - {user?.fullName}</p>
+                <p>{student ? "Редактирование резюме" : "Создание резюме"} - {student.fullName}</p>
             </header>
             <main>
                 <section>
                     <div>
                         <div className='gap-[10px]'>
-                            <button onClick={() => document.getElementById("skin")?.click()}>
+                            <button type="button" onClick={() => document.getElementById("skin")?.click()}>
                                 <Image
                                     width={60}
                                     height={60}
                                     alt="User head"
-                                    src={user.lastModified ? `https://cdn.vaultcommunity.net/hackaton/${user.uuid}.png?lastModified=${user.lastModified}` : `https://cdn.vaultcommunity.net/hackaton/undefined.png`}
+                                    src={icon}
+                                    onError={() => setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png?lastModified=${Date.now()}`)}
                                     className="rounded-full"
                                     quality={100}
                                     priority

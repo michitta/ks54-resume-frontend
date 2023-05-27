@@ -3,8 +3,14 @@
 import { useUniversalContext } from '@/components/universal.context';
 import styles from '@/styles/auth.module.scss';
 import clsx from 'clsx';
+import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+
+export const metadata: Metadata = {
+    title: "Вход в аккаунт"
+};
+
 export default function LogIn() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const router = useRouter();
@@ -15,6 +21,7 @@ export default function LogIn() {
     };
 
     return (
+        !isLoading && !user &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <header>
                 <button type='button' onClick={() => router.push('/')}>Назад</button>

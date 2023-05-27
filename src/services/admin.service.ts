@@ -20,4 +20,14 @@ export const adminService = {
   async deleteStudent(uuid: string) {
     return api.delete(`/admin/${uuid}`).then((res) => res?.data);
   },
+
+  async changeIcon(uuid: string, formData: FormData) {
+    return api
+      .put(`/admin/icon/${uuid}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => res?.data);
+  },
 };

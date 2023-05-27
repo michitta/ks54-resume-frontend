@@ -1,24 +1,34 @@
 "use client";
 
-import { useUniversalContext } from '@/components/universal.context';
+import { IStudent, useUniversalContext } from '@/components/universal.context';
 import { usersService } from '@/services/users.service';
 import styles from '@/styles/adminEdit.module.scss';
 import { error, success } from '@/utils/toaster';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useCallback, useMemo } from 'react';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Личный кабинет"
+};
+
 export default function Cabinet() {
     const router = useRouter();
 
-    const { user, student, setStudent, logout, isLoading, reFetch } = useUniversalContext();
+    const { user, student, setStudent, logout, isLoading } = useUniversalContext();
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ mode: 'onChange' });
+
+    const [icon, setIcon] = useState(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
+
     const onSubmit = async (data: any) => {
         await usersService.setStudent(data);
         reset();
         await getStudent();
+        router.refresh();
     };
 
     const getWidth = (px: number) => {
@@ -29,7 +39,12 @@ export default function Cabinet() {
 
     const getStudent = async () => {
         setStudent(null);
-        setStudent(await usersService.getStudent(user!.uuid))
+        const data = await usersService.getStudent(user!.uuid);
+        if (data) {
+            setStudent(data)
+        } else {
+            setStudent({} as IStudent);
+        }
     }
 
     const onChangeSkin = useCallback(
@@ -43,7 +58,8 @@ export default function Cabinet() {
             let formData = new FormData();
             formData.append("file", item);
             await usersService.changeIcon(formData);
-            await reFetch();
+            setIcon(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
+            router.refresh();
         }, []
     );
 
@@ -52,7 +68,7 @@ export default function Cabinet() {
     }, [user])
 
     return (
-        user && !user.admin &&
+        user && !user.admin && student && !isLoading &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form} >
             <header>
                 <button type="button" onClick={() => router.push('/')}>Назад</button>
@@ -77,12 +93,13 @@ export default function Cabinet() {
                 <section>
                     <div>
                         <div className='gap-[10px]'>
-                            <button type={'button'} onClick={() => document.getElementById("skin")?.click()}>
+                            <button type="button" onClick={() => document.getElementById("skin")?.click()}>
                                 <Image
                                     width={60}
                                     height={60}
                                     alt="User head"
-                                    src={user.lastModified ? `https://cdn.vaultcommunity.net/hackaton/${user.uuid}.png?lastModified=${user.lastModified}` : `https://cdn.vaultcommunity.net/hackaton/undefined.png`}
+                                    src={icon}
+                                    onError={() => setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png?lastModified=${Date.now()}`)}
                                     className="rounded-full"
                                     quality={100}
                                     priority
@@ -99,13 +116,12 @@ export default function Cabinet() {
                                 <input
                                     type="text"
                                     className={errors.fullName ? clsx(styles.input, styles.error) : styles.input}
+                                    defaultValue={student?.fullName ? student?.fullName : user.fullName}
                                     placeholder={student?.fullName ? student?.fullName : user.fullName}
                                     style={{ width: getWidth(student?.fullName ? student?.fullName.length + 2 : user.fullName.length + 2) }}
-                                    disabled={true}
                                     maxLength={20}
                                     {...register(`fullName`, {
                                         required: false,
-                                        value: student?.fullName ? student?.fullName : user.fullName,
                                         onChange: (e) => {
                                             let value = e.target.value;
                                             if (value == 0) value = e.target.defaultValue
@@ -119,7 +135,7 @@ export default function Cabinet() {
                                     defaultValue={student ? student.profession : ""}
                                     className={errors.profession ? clsx(styles.input, styles.error) : styles.input}
                                     placeholder={student ? student.profession : ""}
-                                    style={{ width: getWidth(student ? student.profession.toString().length : 1) }}
+                                    style={{ width: getWidth(student?.profession ? student.profession?.length : 1) }}
                                     {...register(`profession`, {
                                         required: true,
                                         onChange: (e) => {
@@ -138,7 +154,7 @@ export default function Cabinet() {
                                 defaultValue={student ? student.birthday : ""}
                                 className={errors.birthday ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.birthday : ""}
-                                style={{ width: getWidth(student ? student.birthday.toString().length : 1) }}
+                                style={{ width: getWidth(student?.birthday ? student.birthday?.toString().length : 1) }}
                                 maxLength={10}
                                 {...register(`birthday`, {
                                     required: true,
@@ -155,7 +171,7 @@ export default function Cabinet() {
                                 defaultValue={student ? student.phone : ""}
                                 className={errors.phone ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.phone : ""}
-                                style={{ width: getWidth(student ? student.phone.toString().length : 1) }}
+                                style={{ width: getWidth(student?.phone ? student.phone?.toString().length : 1) }}
                                 maxLength={12}
                                 {...register(`phone`, {
                                     required: true,
@@ -172,7 +188,7 @@ export default function Cabinet() {
                                 defaultValue={student ? student.group : ""}
                                 className={errors.group ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.group : ""}
-                                style={{ width: getWidth(student ? student.group.length : 1) }}
+                                style={{ width: getWidth(student?.group ? student.group?.length : 1) }}
                                 maxLength={12}
                                 {...register(`group`, {
                                     required: true,
@@ -192,7 +208,7 @@ export default function Cabinet() {
                                 className={errors.email ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.email : ""}
                                 maxLength={30}
-                                style={{ width: getWidth(student ? student.email.toString().length : 1) }}
+                                style={{ width: getWidth(student?.email ? student.email?.toString().length : 1) }}
                                 {...register(`email`, {
                                     required: true,
                                     onChange: (e) => {
@@ -209,7 +225,7 @@ export default function Cabinet() {
                                 className={errors.telegram ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.telegram : ""}
                                 maxLength={20}
-                                style={{ width: getWidth(student ? student.telegram!.toString().length : 1) }}
+                                style={{ width: getWidth(student?.telegram ? student.telegram?.toString().length : 1) }}
                                 {...register(`telegram`, {
                                     required: false,
                                     onChange: (e) => {
@@ -245,7 +261,7 @@ export default function Cabinet() {
                                 className={errors.educationForm ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.educationForm : ""}
                                 maxLength={16}
-                                style={{ width: getWidth(student ? student.city.toString().length : 1) }}
+                                style={{ width: getWidth(student?.educationForm ? student.educationForm.length : 1) }}
                                 {...register(`educationForm`, {
                                     required: true,
                                     onChange: (e) => {
@@ -262,7 +278,7 @@ export default function Cabinet() {
                                 className={errors.city ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.city : ""}
                                 maxLength={20}
-                                style={{ width: getWidth(student ? student.city.toString().length : 1) }}
+                                style={{ width: getWidth(student?.city ? student.city?.toString().length : 1) }}
                                 {...register(`city`, {
                                     required: true,
                                     onChange: (e) => {
@@ -279,7 +295,7 @@ export default function Cabinet() {
                                 className={errors.endYear ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.endYear : ""}
                                 maxLength={4}
-                                style={{ width: getWidth(student ? student.endYear.toString().length : 1) }}
+                                style={{ width: getWidth(student?.endYear ? student.endYear?.toString().length : 1) }}
                                 {...register(`endYear`, {
                                     required: true,
                                     onChange: (e) => {
