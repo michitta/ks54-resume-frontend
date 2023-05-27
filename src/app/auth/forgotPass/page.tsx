@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 export default function ForgotPass() {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const navigator = useRouter();
+    const router = useRouter();
 
     const { user, login, isLoading, recovery } = useUniversalContext();
     const onSubmit = async (data: any) => {
@@ -16,10 +16,9 @@ export default function ForgotPass() {
     };
 
     return (
-        !user &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <header>
-                <button type='button' onClick={() => navigator.back()}>Назад</button>
+                <button type='button' onClick={() => router.back()}>Назад</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L1 21" stroke="#333333" strokeLinecap="round" />
                 </svg>
@@ -56,7 +55,7 @@ export default function ForgotPass() {
                             <span></span>
                         ) : "Восстановить доступ"}</button>
                         <span>
-                            <a onClick={() => navigator.push('auth/login')}>Вспомнили пароль?</a>
+                            <a onClick={() => router.push('auth/login')}>Вспомнили пароль?</a>
                         </span>
                     </div>
                 </div>

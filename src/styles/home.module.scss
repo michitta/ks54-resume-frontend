@@ -1,5 +1,5 @@
 .main {
-  @apply flex flex-col gap-[100px];
+  @apply flex flex-col gap-[100px] w-screen h-screen items-center justify-center;
   animation: 0.5s fadeIn ease-in-out;
 
   > div {

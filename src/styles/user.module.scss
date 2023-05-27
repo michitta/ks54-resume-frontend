@@ -1,4 +1,4 @@
-.form {
+.main {
   @apply flex flex-col rounded-[20px] p-[20px] bg-[#121212] gap-[20px];
   border: 1px solid #333333;
   animation: 0.5s fadeIn ease-in-out;
@@ -25,7 +25,7 @@
     }
   }
 
-  > main {
+  > div {
     @apply flex flex-col gap-[20px];
 
     > section {
@@ -34,20 +34,25 @@
 
       &:first-child {
         @apply flex flex-col gap-[20px];
-
         > div {
           @apply flex w-full justify-between gap-[20px];
 
           > div {
-            @apply flex flex-col justify-center;
+            @apply flex flex-col gap-[2px] justify-center;
 
             > span {
-              > input {
-                @apply font-bold text-[20px] text-white;
-              }
+              @apply flex gap-[2px];
 
               > p {
-                @apply font-bold text-[16px] text-[#FFFFFFBF];
+                @apply font-bold text-[16px];
+
+                &:first-child {
+                  @apply text-[#FFFFFFBF];
+                }
+
+                &:last-child {
+                  @apply text-[#FFFFFF80];
+                }
               }
             }
 
@@ -114,43 +119,6 @@
         @apply text-white;
       }
     }
-  }
-}
-
-.input {
-  @apply max-w-[200px] bg-[#1E1E1E] text-[#FFFFFF80] font-bold text-base rounded-[4px];
-
-  &::placeholder {
-    @apply font-semibold text-[#FFFFFF40];
-  }
-
-  &:focus {
-    outline: none;
-    color: #ffffff;
-    background: #222222;
-  }
-}
-
-.textarea {
-  @apply max-w-full min-h-[50px] bg-[#1E1E1E] text-[#FFFFFF80] font-bold text-base rounded-[12px] p-[12px] transition-none;
-
-  &::placeholder {
-    @apply font-semibold text-[#FFFFFF40];
-  }
-
-  &:focus {
-    outline: none;
-    color: #ffffff;
-    background: #222222;
-  }
-}
-
-.error {
-  @apply text-[#FF463CBF];
-  border: 1px solid #ff463cbf;
-
-  &::placeholder {
-    @apply text-[#FF463CBF];
   }
 }
 

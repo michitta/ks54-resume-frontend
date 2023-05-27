@@ -7,21 +7,19 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 export default function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const navigator = useRouter();
+    const router = useRouter();
 
-    const { user, login, isLoading, reg } = useUniversalContext();
+    const { isLoading, reg } = useUniversalContext();
     const onSubmit = (data: any) => {
         if (data) {
-            console.log(data)
             reg(data.fullName, data.email, data.password);
         }
     };
 
     return (
-        !isLoading && !user &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
             <header>
-                <button type='button' onClick={() => navigator.back()}>Назад</button>
+                <button type='button' onClick={() => router.back()}>Назад</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L1 21" stroke="#333333" strokeLinecap="round" />
                 </svg>
@@ -40,7 +38,7 @@ export default function Register() {
                             type="text"
                             defaultValue={""}
                             placeholder="Введите ФИО (Абоб А.Р.)"
-                            {...register(`fullName`, { required: true, maxLength: 100 })}
+                            {...register(`fullName`, { required: true, maxLength: 100, pattern: /^[А-ЯЁ][а-яё]+\s[А-ЯЁ]\.([А-ЯЁ]\.)?$/ })}
                         />
                         <input
                             className={clsx(
@@ -68,7 +66,7 @@ export default function Register() {
                             <span></span>
                         ) : "Создать аккаунт"}</button>
                         <span>
-                            <a onClick={() => navigator.push('auth/login')}>У Вас уже есть аккаунт?</a>
+                            <a onClick={() => router.push('auth/login')}>У Вас уже есть аккаунт?</a>
                         </span>
                     </div>
                 </div>

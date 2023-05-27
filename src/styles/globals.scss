@@ -12,18 +12,8 @@ a {
   text-decoration: none;
 }
 
-* {
-  @apply p-0 m-0 box-border border-none select-none transition-all;
-  color: #fff;
-  font-family: "Manrope";
-  user-select: none;
-  font-weight: normal;
-}
-
-body {
-  @apply flex items-center justify-center overflow-x-hidden;
-  height: 100vh;
-  width: 100vw;
+html {
+  @apply max-h-fit scroll-smooth bg-cover bg-no-repeat;
   background: url("./noise.png"),
     linear-gradient(
       65.5deg,
@@ -33,4 +23,16 @@ body {
       rgba(158, 255, 168, 0.08) 100%
     ),
     #000000;
+}
+
+* {
+  @apply p-0 m-0 border-none select-none transition-all;
+  color: #fff;
+  font-family: "Manrope";
+  user-select: none;
+  font-weight: normal;
+}
+
+body {
+  @apply w-full h-full flex flex-col items-center overflow-x-hidden justify-center p-[20px];
 }

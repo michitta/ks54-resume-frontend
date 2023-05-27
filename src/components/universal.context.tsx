@@ -10,15 +10,15 @@ import {
 } from "react";
 import { authService } from "@/services/auth.service";
 import { useRouter, usePathname } from "next/navigation";
-import { error, success } from "@/utils/toaster";
 
 interface IUser {
-    uuid: number;
+    uuid: string;
     fullName: string;
     admin: boolean;
+    lastModified: Date;
 }
 
-interface IStudent {
+export interface IStudent {
     uuid: string;
     fullName: string;
     profession: string;
@@ -26,11 +26,12 @@ interface IStudent {
     group: string;
     phone: string;
     email: string;
-    telegram: string;
-    driverLicence: string;
+    telegram?: string;
+    driverLicence?: string;
     educationForm: string;
     city: string;
     endYear: string;
+    launguages: string;
     professionalSkills: string;
     socialSkills: string;
     additionalSkills: string;
@@ -39,6 +40,14 @@ interface IStudent {
     educations: string;
     courses: string;
     awards: string;
+    practiceName?: string;
+    practiceTime?: string;
+    practiceByProfession?: string;
+    practiceFunctions?: string;
+    workName?: string;
+    workTime?: string;
+    workByProfession?: string;
+    workFunctions?: string;
 }
 
 type UniversalContextData = {
@@ -63,7 +72,7 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
     const [student, setStudent] = useState<IStudent | null>(null);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const navigator = useRouter();
+    const router = useRouter();
     const path = usePathname();
 
     useEffect(() => {
@@ -71,51 +80,54 @@ const UniversalProvider: FC<PropsWithChildren> = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        if (!user && !isLoading) if (!path.includes('auth') && path != "/") navigator.push('/auth/login')
-        if (user && !isLoading && path.includes('auth')) {
-            console.log(user.admin)
-            if (user.admin) {
-                navigator.push('/admin')
+        if (path != "/" && !path.includes('user/')) {
+            if (user) {
+                if (user.admin) {
+                    !path.includes('admin') && router.push('/admin')
+                } else {
+                    router.push('/cabinet')
+                }
             } else {
-                navigator.push('/cabinet')
+                !path.includes('auth') && router.push('/auth/login')
             }
-        };
+        }
     }, [user, isLoading, path]);
 
     const login = async (email: string, password: string) => {
-        setIsLoading(true);
-        const req = await authService.login(email, password);
-        if (req) await reFetch();
-        setIsLoading(false);
+        await authService.login(email, password);
+        await reFetch();
     };
 
     const reg = async (fullName: string, email: string, password: string) => {
-        setIsLoading(true);
-        const req = await authService.register(fullName, email, password);
-        if (req) await reFetch();
-        setIsLoading(false);
+        await authService.register(fullName, email, password);
+        await reFetch();
     };
 
     const logout = async () => {
-        setIsLoading(true);
-        const req = await authService.logout();
-        if (req) await reFetch();
-        setIsLoading(false);
+        await authService.logout();
+        await reFetch();
     }
 
     const recovery = async (email: string, password: string) => {
         setIsLoading(true);
         const req = await authService.recoveryPass(email, password);
-        if (req) navigator.push('/auth/login');
+        if (req) router.push('/auth/login');
         setIsLoading(false);
     }
 
     const reFetch = async () => {
         setIsLoading(true);
         const res = await authService.me();
-        setIsLoading(false);
-        if (!res) return;
-        setUser(res.data);
+        if (!res) {
+            setIsLoading(false);
+            setUser(null);
+            setStudent(null);
+            return;
+        } else {
+            setUser(res.data);
+            setIsLoading(false);
+        }
+
     };
 
     return (

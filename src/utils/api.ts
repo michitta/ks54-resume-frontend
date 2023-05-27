@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { error, success } from "./toaster";
 
 const api = axios.create({
-  baseURL: "http://localhost:3003/api/v1",
+  baseURL: "https://owocon.eu.org/api/v1",
   withCredentials: true,
 });
 
