@@ -65,7 +65,7 @@ export default function Register() {
                             type="password"
                             defaultValue={""}
                             placeholder="Придумайте пароль"
-                            {...register(`password`, { required: true, maxLength: 40, minLength: 10 })}
+                            {...register(`password`, { required: true, maxLength: 40, minLength: 6 })}
                         />
                     </div>
                     <div className={styles.bottom}>

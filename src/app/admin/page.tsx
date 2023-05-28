@@ -35,7 +35,6 @@ export default function Admin() {
                 <div>
                     <div className={styles.top}>
                         <AsyncSelector
-                            cacheOptions={true}
                             placeholder={"Введите фамилию студента"}
                             loadOptions={async (inputValue: string) => {
                                 const data: IStudent[] = await adminService.searchStudent(inputValue);

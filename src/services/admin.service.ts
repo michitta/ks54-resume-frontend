@@ -2,7 +2,9 @@ import api from "../utils/api";
 
 export const adminService = {
   async searchStudent(fullName: string) {
-    return api.get(`/admin/${fullName}`).then((res) => res?.data);
+    return api
+      .get(`/admin/search?fullName=${fullName}`)
+      .then((res) => res?.data);
   },
 
   async getStudent(uuid: string) {
