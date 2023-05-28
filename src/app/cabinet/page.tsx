@@ -53,7 +53,7 @@ export default function Cabinet() {
         }
     });
 
-    const [icon, setIcon] = useState(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${student?.lastModified}`);
+    const [icon, setIcon] = useState<string>("");
 
     const onSubmit = async (data: any) => {
         await usersService.setStudent(data);
@@ -70,6 +70,7 @@ export default function Cabinet() {
     const getStudent = async () => {
         setStudent(null);
         setStudent(await usersService.getStudent(user!.uuid));
+        setIcon(`https://cdn.vaultcommunity.net/hackaton/${user?.uuid}.png?lastModified=${Date.now()}`)
     }
 
     const onChangeIcon = useCallback(
@@ -83,9 +84,9 @@ export default function Cabinet() {
             let formData = new FormData();
             formData.append("file", item);
             await usersService.changeIcon(formData);
-            setIcon(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${student?.lastModified}`);
-            await reFetch();
-        }, []
+            await getStudent();
+            setIcon(`https://cdn.vaultcommunity.net/hackaton/${user?.uuid}.png?lastModified=${Date.now()}`);
+        }, [user]
     );
 
     useMemo(async () => {
@@ -124,12 +125,9 @@ export default function Cabinet() {
                                     height={60}
                                     alt="User head"
                                     src={icon}
-                                    onError={() => {
-                                        setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png`)
-                                    }}
-                                    className="rounded-full"
                                     quality={100}
-                                    priority
+                                    priority={true}
+                                    className="rounded-full"
                                 ></Image>
                             </button>
                             <input

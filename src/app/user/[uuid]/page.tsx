@@ -1,37 +1,25 @@
-"use client";
-
-import { IStudent } from '@/components/universal.context';
 import { usersService } from '@/services/users.service';
 import styles from '@/styles/user.module.scss';
-import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
 import Image from 'next/image';
-import { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-export const metadata: Metadata = {
-    title: "Резюме студента"
-};
+const fetchData = async (uuid: string) => {
+    return await usersService.getStudent(uuid);
+}
 
-export default function User({ params }: any) {
-    const router = useRouter();
-
-    const [student, setStudent] = useState<IStudent | null>();
-
-    const [icon, setIcon] = useState(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
-
-    useMemo(async () => {
-        setStudent(await usersService.getStudent(params.uuid))
-    }, [])
+export default async function User({ params }: any) {
+    const student = await fetchData(params.uuid);
+    if (!student) return notFound();
 
     return (
-        student &&
         <main className={styles.main} >
             <header>
-                <button type="button" onClick={() => router.push('/')}>Назад</button>
+                <Link href={`/`}>На главную</Link>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L1 21" stroke="#333333" strokeLinecap="round" />
                 </svg>
-                <p>Просмотр резюме студента - {student?.fullName}</p>
+                <p>Просмотр резюме студента - {student.fullName}</p>
             </header>
             <div>
                 <section>
@@ -41,8 +29,7 @@ export default function User({ params }: any) {
                                 width={60}
                                 height={60}
                                 alt="User head"
-                                src={icon}
-                                onError={() => setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png?lastModified=${Date.now()}`)}
+                                src={`https://cdn.vaultcommunity.net/hackaton/${student.uuid}.png?lastModified=${student.lastModified}`}
                                 className="rounded-full"
                                 quality={100}
                                 priority

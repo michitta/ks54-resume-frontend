@@ -78,9 +78,9 @@ export default function AdminEdit() {
             let formData = new FormData();
             formData.append("file", item);
             await adminService.changeIcon(student!.uuid, formData);
-            setIcon(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${student?.lastModified}`);
+            setIcon(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
             router.refresh();
-        }, []
+        }, [student]
     );
 
     const getStudent = async () => {
