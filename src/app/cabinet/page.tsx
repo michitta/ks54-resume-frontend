@@ -18,17 +18,47 @@ export const metadata: Metadata = {
 export default function Cabinet() {
     const router = useRouter();
 
-    const { user, student, setStudent, logout, isLoading } = useUniversalContext();
+    const { user, student, setStudent, logout, isLoading, reFetch } = useUniversalContext();
 
-    const { register, handleSubmit, formState: { errors }, reset } = useForm({ mode: 'onChange' });
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+        mode: 'onChange', values: {
+            fullName: student?.fullName ? student?.fullName : user?.fullName,
+            profession: student?.profession,
+            birthday: student?.birthday,
+            phone: student?.phone,
+            group: student?.group,
+            email: student?.email,
+            telegram: student?.telegram,
+            driverLicence: student?.driverLicence,
+            educationForm: student?.educationForm,
+            city: student?.city,
+            endYear: student?.endYear,
+            practiceName: student?.practiceName,
+            practiceTime: student?.practiceTime,
+            practiceFunctions: student?.practiceFunctions,
+            practiceByProfession: student?.practiceByProfession,
+            workName: student?.workName,
+            workTime: student?.workTime,
+            workFunctions: student?.workFunctions,
+            workByProfession: student?.workByProfession,
+            launguages: student?.launguages,
+            professionalSkills: student?.professionalSkills,
+            socialSkills: student?.socialSkills,
+            educations: student?.educations,
+            courses: student?.courses,
+            additionalSkills: student?.additionalSkills,
+            additionalInfo: student?.additionalInfo,
+            workExperience: student?.workExperience,
+            awards: student?.awards
+        }
+    });
 
-    const [icon, setIcon] = useState(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
+    const [icon, setIcon] = useState(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${student?.lastModified}`);
 
     const onSubmit = async (data: any) => {
         await usersService.setStudent(data);
         reset();
         await getStudent();
-        router.refresh();
     };
 
     const getWidth = (px: number) => {
@@ -39,15 +69,10 @@ export default function Cabinet() {
 
     const getStudent = async () => {
         setStudent(null);
-        const data = await usersService.getStudent(user!.uuid);
-        if (data) {
-            setStudent(data)
-        } else {
-            setStudent({} as IStudent);
-        }
+        setStudent(await usersService.getStudent(user!.uuid));
     }
 
-    const onChangeSkin = useCallback(
+    const onChangeIcon = useCallback(
         async (event: ChangeEvent<HTMLInputElement>) => {
             let item = event.target.files![0];
             if (!item) return;
@@ -58,8 +83,8 @@ export default function Cabinet() {
             let formData = new FormData();
             formData.append("file", item);
             await usersService.changeIcon(formData);
-            setIcon(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
-            router.refresh();
+            setIcon(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${student?.lastModified}`);
+            await reFetch();
         }, []
     );
 
@@ -68,7 +93,7 @@ export default function Cabinet() {
     }, [user])
 
     return (
-        user && !user.admin && student && !isLoading &&
+        user && !user.admin && !isLoading &&
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form} >
             <header>
                 <button type="button" onClick={() => router.push('/')}>Назад</button>
@@ -93,13 +118,15 @@ export default function Cabinet() {
                 <section>
                     <div>
                         <div className='gap-[10px]'>
-                            <button type="button" onClick={() => document.getElementById("skin")?.click()}>
+                            <button type="button" onClick={() => document.getElementById("icon")!.click()}>
                                 <Image
                                     width={60}
                                     height={60}
                                     alt="User head"
                                     src={icon}
-                                    onError={() => setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png?lastModified=${Date.now()}`)}
+                                    onError={() => {
+                                        setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png`)
+                                    }}
                                     className="rounded-full"
                                     quality={100}
                                     priority
@@ -107,24 +134,24 @@ export default function Cabinet() {
                             </button>
                             <input
                                 style={{ display: "none" }}
-                                id="skin"
+                                id="icon"
                                 type="file"
                                 accept="image/png"
-                                onChange={onChangeSkin}
+                                onChange={onChangeIcon}
                             ></input>
                             <span>
                                 <input
                                     type="text"
                                     className={errors.fullName ? clsx(styles.input, styles.error) : styles.input}
-                                    defaultValue={student?.fullName ? student?.fullName : user.fullName}
                                     placeholder={student?.fullName ? student?.fullName : user.fullName}
                                     style={{ width: getWidth(student?.fullName ? student?.fullName.length + 2 : user.fullName.length + 2) }}
                                     maxLength={20}
+                                    disabled={true}
                                     {...register(`fullName`, {
                                         required: false,
                                         onChange: (e) => {
                                             let value = e.target.value;
-                                            if (value == 0) value = e.target.defaultValue
+                                            if (value == 0) value = e.target.placeholder
                                             const width = getWidth(value.toString().length);
                                             e.target.style.width = width;
                                         },
@@ -132,7 +159,6 @@ export default function Cabinet() {
                                 />
                                 <p>Профессия: <input
                                     type="text"
-                                    defaultValue={student ? student.profession : ""}
                                     className={errors.profession ? clsx(styles.input, styles.error) : styles.input}
                                     placeholder={student ? student.profession : ""}
                                     style={{ width: getWidth(student?.profession ? student.profession?.length : 1) }}
@@ -140,7 +166,7 @@ export default function Cabinet() {
                                         required: true,
                                         onChange: (e) => {
                                             let value = e.target.value;
-                                            if (value == 0) value = e.target.defaultValue
+                                            if (value == 0) value = e.target.placeholder
                                             const width = getWidth(value.toString().length);
                                             e.target.style.width = width;
                                         },
@@ -151,7 +177,6 @@ export default function Cabinet() {
                         <div>
                             <p>Год рождения: <input
                                 type="text"
-                                defaultValue={student ? student.birthday : ""}
                                 className={errors.birthday ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.birthday : ""}
                                 style={{ width: getWidth(student?.birthday ? student.birthday?.toString().length : 1) }}
@@ -160,7 +185,7 @@ export default function Cabinet() {
                                     required: true,
                                     onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -168,7 +193,6 @@ export default function Cabinet() {
                             /></p>
                             <p>Номер телефона: <input
                                 type="text"
-                                defaultValue={student ? student.phone : ""}
                                 className={errors.phone ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.phone : ""}
                                 style={{ width: getWidth(student?.phone ? student.phone?.toString().length : 1) }}
@@ -177,7 +201,7 @@ export default function Cabinet() {
                                     required: true,
                                     onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -185,7 +209,6 @@ export default function Cabinet() {
                             /></p>
                             <p>Группа: <input
                                 type="text"
-                                defaultValue={student ? student.group : ""}
                                 className={errors.group ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.group : ""}
                                 style={{ width: getWidth(student?.group ? student.group?.length : 1) }}
@@ -194,7 +217,7 @@ export default function Cabinet() {
                                     required: true,
                                     onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -204,7 +227,6 @@ export default function Cabinet() {
                         <div>
                             <p>Email: <input
                                 type="text"
-                                defaultValue={student ? student.email : ""}
                                 className={errors.email ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.email : ""}
                                 maxLength={30}
@@ -213,7 +235,7 @@ export default function Cabinet() {
                                     required: true,
                                     onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -221,16 +243,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Telegram: <input
                                 type="text"
-                                defaultValue={student ? student.telegram : ""}
                                 className={errors.telegram ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.telegram : ""}
                                 maxLength={20}
                                 style={{ width: getWidth(student?.telegram ? student.telegram?.toString().length : 1) }}
                                 {...register(`telegram`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -238,16 +258,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Вод. Удостоверение: <input
                                 type="text"
-                                defaultValue={student ? student.driverLicence : ""}
                                 className={errors.driverLicence ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.driverLicence : ""}
                                 maxLength={3}
                                 style={{ width: getWidth(student?.driverLicence ? student.driverLicence.length : 1) }}
                                 {...register(`driverLicence`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -257,16 +275,14 @@ export default function Cabinet() {
                         <div>
                             <p>Форма обучения: <input
                                 type="text"
-                                defaultValue={student ? student.educationForm : ""}
                                 className={errors.educationForm ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.educationForm : ""}
                                 maxLength={16}
                                 style={{ width: getWidth(student?.educationForm ? student.educationForm.length : 1) }}
                                 {...register(`educationForm`, {
-                                    required: true,
-                                    onChange: (e) => {
+                                    required: true, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -274,16 +290,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Город проживания: <input
                                 type="text"
-                                defaultValue={student ? student.city : ""}
                                 className={errors.city ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.city : ""}
                                 maxLength={20}
                                 style={{ width: getWidth(student?.city ? student.city?.toString().length : 1) }}
                                 {...register(`city`, {
-                                    required: true,
-                                    onChange: (e) => {
+                                    required: true, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -291,16 +305,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Год завершения обучения: <input
                                 type="text"
-                                defaultValue={student ? student.endYear : ""}
                                 className={errors.endYear ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.endYear : ""}
                                 maxLength={4}
                                 style={{ width: getWidth(student?.endYear ? student.endYear?.toString().length : 1) }}
                                 {...register(`endYear`, {
-                                    required: true,
-                                    onChange: (e) => {
+                                    required: true, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -316,16 +328,14 @@ export default function Cabinet() {
                         <div>
                             <p>Место практики: <input
                                 type="text"
-                                defaultValue={student ? student.practiceName : ""}
                                 className={errors.practiceName ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.practiceName : ""}
                                 maxLength={24}
                                 style={{ width: getWidth(student?.practiceName ? student.practiceName.length : 1) }}
                                 {...register(`practiceName`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -333,16 +343,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Практикуется (время): <input
                                 type="text"
-                                defaultValue={student ? student.practiceTime : ""}
                                 className={errors.practiceTime ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.practiceTime : ""}
                                 maxLength={24}
                                 style={{ width: getWidth(student?.practiceTime ? student.practiceTime.length : 1) }}
                                 {...register(`practiceTime`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -350,16 +358,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Выполняет функции: <input
                                 type="text"
-                                defaultValue={student ? student.practiceFunctions : ""}
                                 className={errors.practiceFunctions ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.practiceFunctions : ""}
                                 maxLength={40}
                                 style={{ width: getWidth(student?.practiceFunctions ? student.practiceFunctions.length : 1) }}
                                 {...register(`practiceFunctions`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -368,16 +374,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Проходит практику по специальности: <input
                                 type="text"
-                                defaultValue={student ? student.practiceByProfession : ""}
                                 className={errors.practiceByProfession ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.practiceByProfession : ""}
                                 maxLength={40}
                                 style={{ width: getWidth(student?.practiceByProfession ? student.practiceByProfession.length : 1) }}
                                 {...register(`practiceByProfession`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -388,16 +392,14 @@ export default function Cabinet() {
                         <div>
                             <p>Сейчас работает: <input
                                 type="text"
-                                defaultValue={student ? student.workName : ""}
                                 className={errors.workName ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.workName : ""}
                                 maxLength={24}
                                 style={{ width: getWidth(student?.workName ? student.workName.length : 1) }}
                                 {...register(`workName`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -405,16 +407,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Работает (время): <input
                                 type="text"
-                                defaultValue={student ? student.workTime : ""}
                                 className={errors.workTime ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.workTime : ""}
                                 maxLength={24}
                                 style={{ width: getWidth(student?.workTime ? student.workTime.length : 1) }}
                                 {...register(`workTime`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -422,7 +422,6 @@ export default function Cabinet() {
                             /></p>
                             <p>Выполняет функции: <input
                                 type="text"
-                                defaultValue={student ? student.workFunctions : ""}
                                 className={errors.workFunctions ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.workFunctions : ""}
                                 maxLength={40}
@@ -440,16 +439,14 @@ export default function Cabinet() {
                             /></p>
                             <p>Работает по специальности: <input
                                 type="text"
-                                defaultValue={student ? student.workByProfession : ""}
                                 className={errors.workByProfession ? clsx(styles.input, styles.error) : styles.input}
                                 placeholder={student ? student.workByProfession : ""}
                                 maxLength={40}
                                 style={{ width: getWidth(student?.workByProfession ? student.workByProfession.length : 1) }}
                                 {...register(`workByProfession`, {
-                                    required: false,
-                                    onChange: (e) => {
+                                    required: false, onChange: (e) => {
                                         let value = e.target.value;
-                                        if (value == 0) value = e.target.defaultValue
+                                        if (value == 0) value = e.target.placeholder
                                         const width = getWidth(value.toString().length);
                                         e.target.style.width = width;
                                     },
@@ -464,7 +461,6 @@ export default function Cabinet() {
                         <span>
                             <p>Иностр. языки: </p>
                             <textarea
-                                defaultValue={student ? student.launguages : ""}
                                 className={errors.launguages ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.socialSkills : ""}
                                 maxLength={100}
@@ -474,7 +470,6 @@ export default function Cabinet() {
                         <span>
                             <p>Проф. Навыки: </p>
                             <textarea
-                                defaultValue={student ? student.professionalSkills : ""}
                                 className={errors.professionalSkills ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.professionalSkills : ""}
                                 maxLength={255}
@@ -483,7 +478,6 @@ export default function Cabinet() {
                         <span>
                             <p>Соц. навыки: </p>
                             <textarea
-                                defaultValue={student ? student.socialSkills : ""}
                                 className={errors.socialSkills ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.socialSkills : ""}
                                 maxLength={255}
@@ -493,7 +487,6 @@ export default function Cabinet() {
                         <span>
                             <p>Образование: </p>
                             <textarea
-                                defaultValue={student ? student.educations : ""}
                                 className={errors.educations ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.educations : ""}
                                 maxLength={100}
@@ -503,7 +496,6 @@ export default function Cabinet() {
                         <span>
                             <p>Пройденные курсы: </p>
                             <textarea
-                                defaultValue={student ? student.courses : ""}
                                 className={errors.courses ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.courses : ""}
                                 maxLength={255}
@@ -513,7 +505,6 @@ export default function Cabinet() {
                         <span>
                             <p>Доп. навыки: </p>
                             <textarea
-                                defaultValue={student ? student.additionalSkills : ""}
                                 className={errors.additionalSkills ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.additionalSkills : ""}
                                 maxLength={255}
@@ -523,7 +514,6 @@ export default function Cabinet() {
                         <span>
                             <p>Доп. Информация: </p>
                             <textarea
-                                defaultValue={student ? student.additionalInfo : ""}
                                 className={errors.additionalInfo ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.additionalInfo : ""}
                                 maxLength={255}
@@ -533,7 +523,6 @@ export default function Cabinet() {
                         <span>
                             <p>Опыт работы: </p>
                             <textarea
-                                defaultValue={student ? student.workExperience : ""}
                                 className={errors.workExperience ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.workExperience : ""}
                                 maxLength={400}
@@ -544,7 +533,6 @@ export default function Cabinet() {
                         <span>
                             <p>Награды: </p>
                             <textarea
-                                defaultValue={student ? student.awards : ""}
                                 className={errors.awards ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.awards : ""}
                                 maxLength={400}
@@ -554,7 +542,7 @@ export default function Cabinet() {
                         </span>
                     </div>
                 </section>
-            </main >
+            </main>
         </form >
     )
 }

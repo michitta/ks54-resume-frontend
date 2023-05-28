@@ -15,7 +15,6 @@ interface IUser {
     uuid: string;
     fullName: string;
     admin: boolean;
-    lastModified: Date;
 }
 
 export interface IStudent {
@@ -48,6 +47,7 @@ export interface IStudent {
     workTime?: string;
     workByProfession?: string;
     workFunctions?: string;
+    lastModified: Date;
 }
 
 type UniversalContextData = {
