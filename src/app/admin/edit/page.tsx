@@ -523,7 +523,7 @@ export default function AdminEdit() {
                             <textarea
                                 className={errors.workExperience ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.workExperience : ""}
-                                maxLength={400}
+                                maxLength={800}
                                 draggable={false}
                                 {...register(`workExperience`, { required: true })}
                             />

@@ -1,102 +1,215 @@
-.main {
-  @apply flex flex-col rounded-[20px] p-[20px] bg-[#121212] gap-[20px];
-  border: 1px solid #333333;
-  animation: 0.5s fadeIn ease-in-out;
+@media (max-width: 900px) {
+  .main {
+    @apply flex flex-col rounded-[20px] p-[20px] bg-[#121212] gap-[20px];
+    border: 1px solid #333333;
+    animation: 0.5s fadeIn ease-in-out;
 
-  > header {
-    @apply flex gap-[20px] items-center;
+    > header {
+      @apply flex gap-[20px] items-center;
 
-    > a {
-      @apply bg-[#1E1E1E] rounded-[12px] font-extrabold text-white text-[16px] leading-[12px];
-      padding: 14px 20px;
+      > a {
+        @apply bg-[#1E1E1E] rounded-[12px] font-extrabold text-white text-[16px];
+        padding: 14px 20px;
 
-      &:hover {
-        @apply bg-[#222222];
+        &:hover {
+          @apply bg-[#222222];
+        }
+
+        &:active {
+          @apply bg-[#252525];
+          outline: 1px solid;
+        }
       }
 
-      &:active {
-        @apply bg-[#252525];
-        outline: 1px solid;
+      > p {
+        @apply font-extrabold text-[16px] text-[#FFFFFF80];
       }
     }
 
-    > p {
-      @apply font-extrabold text-[16px] text-[#FFFFFF80];
-    }
-  }
+    > div {
+      @apply flex flex-col gap-[20px] items-center;
 
-  > div {
-    @apply flex flex-col gap-[20px];
+      > section {
+        @apply flex flex-col gap-[40px] justify-between items-center rounded-[20px] p-[20px];
+        border: 1px solid #333333;
 
-    > section {
-      @apply flex flex-col gap-[40px] justify-between items-center rounded-[20px] p-[20px];
-      border: 1px solid #333333;
-
-      &:first-child {
-        @apply flex flex-col gap-[20px];
-
-        > div {
-          @apply flex w-full justify-between gap-[20px];
-
-          > svg {
-            @apply w-full h-[20px];
-          }
+        &:first-child {
+          @apply flex flex-col gap-[20px];
 
           > div {
-            @apply flex flex-col gap-[2px] justify-center;
+            @apply flex flex-col w-full justify-between gap-[20px];
 
-            > span {
-              @apply flex gap-[2px];
+            > svg {
+              @apply w-full h-[20px];
+            }
 
-              > h1 {
-                @apply font-bold text-[20px] text-white;
+            > div {
+              @apply flex flex-col gap-[2px] justify-center;
+
+              > span {
+                @apply flex gap-[2px] items-center;
+
+                > h1 {
+                  @apply font-bold text-[20px] text-white;
+                }
+
+                > p {
+                  @apply font-bold text-[16px];
+
+                  &:first-child {
+                    @apply text-[#FFFFFFBF];
+                  }
+
+                  &:last-child {
+                    @apply text-[#FFFFFF80];
+                  }
+                }
               }
 
               > p {
-                @apply font-bold text-[16px];
-
-                &:first-child {
-                  @apply text-[#FFFFFFBF];
-                }
-
-                &:last-child {
-                  @apply text-[#FFFFFF80];
-                }
+                @apply font-bold text-[16px] text-[#FFFFFFBF];
               }
             }
+          }
+        }
 
+        &:last-child {
+          @apply flex flex-col gap-[20px] h-full;
+          > div {
             > p {
               @apply font-bold text-[16px] text-[#FFFFFFBF];
+            }
+
+            &:first-child {
+              @apply w-full flex justify-between;
+            }
+            &:last-child {
+              @apply w-full h-full flex flex-col gap-[10px];
+
+              > span {
+                @apply flex flex-col gap-[10px];
+
+                > p {
+                  @apply font-bold text-[16px]  whitespace-pre-wrap;
+
+                  &:first-child {
+                    @apply text-[#FFFFFFBF];
+                  }
+
+                  &:last-child {
+                    @apply text-[#FFFFFF80];
+                  }
+                }
+              }
             }
           }
         }
       }
+    }
+  }
+}
 
-      &:last-child {
-        @apply flex flex-col gap-[20px] h-full;
-        > div {
-          > p {
-            @apply font-bold text-[16px] text-[#FFFFFFBF];
-          }
+@media (min-width: 900px) {
+  .main {
+    @apply flex flex-col rounded-[20px] p-[20px] bg-[#121212] gap-[20px];
+    border: 1px solid #333333;
+    animation: 0.5s fadeIn ease-in-out;
 
-          &:first-child {
-            @apply w-full flex justify-between;
-          }
-          &:last-child {
-            @apply w-full h-full flex flex-col gap-[10px];
+    > header {
+      @apply flex gap-[20px] items-center;
 
-            > span {
-              @apply flex flex-col gap-[10px];
+      > a {
+        @apply bg-[#1E1E1E] rounded-[12px] font-extrabold text-white text-[16px] leading-[12px];
+        padding: 14px 20px;
 
-              > p {
-                @apply font-bold text-[16px]  whitespace-pre-wrap;
+        &:hover {
+          @apply bg-[#222222];
+        }
 
-                &:first-child {
-                  @apply text-[#FFFFFFBF];
+        &:active {
+          @apply bg-[#252525];
+          outline: 1px solid;
+        }
+      }
+
+      > p {
+        @apply font-extrabold text-[16px] text-[#FFFFFF80];
+      }
+    }
+
+    > div {
+      @apply flex flex-col gap-[20px];
+
+      > section {
+        @apply flex flex-col gap-[40px] justify-between items-center rounded-[20px] p-[20px];
+        border: 1px solid #333333;
+
+        &:first-child {
+          @apply flex flex-col gap-[20px];
+
+          > div {
+            @apply flex w-full justify-between gap-[20px];
+
+            > svg {
+              @apply w-full h-[20px];
+            }
+
+            > div {
+              @apply flex flex-col gap-[2px] justify-center;
+
+              > span {
+                @apply flex gap-[2px];
+
+                > h1 {
+                  @apply font-bold text-[20px] text-white;
                 }
 
-                &:last-child {
-                  @apply text-[#FFFFFF80];
+                > p {
+                  @apply font-bold text-[16px];
+
+                  &:first-child {
+                    @apply text-[#FFFFFFBF];
+                  }
+
+                  &:last-child {
+                    @apply text-[#FFFFFF80];
+                  }
+                }
+              }
+
+              > p {
+                @apply font-bold text-[16px] text-[#FFFFFFBF];
+              }
+            }
+          }
+        }
+
+        &:last-child {
+          @apply flex flex-col gap-[20px] h-full;
+          > div {
+            > p {
+              @apply font-bold text-[16px] text-[#FFFFFFBF];
+            }
+
+            &:first-child {
+              @apply w-full flex justify-between;
+            }
+            &:last-child {
+              @apply w-full h-full flex flex-col gap-[10px];
+
+              > span {
+                @apply flex flex-col gap-[10px];
+
+                > p {
+                  @apply font-bold text-[16px]  whitespace-pre-wrap;
+
+                  &:first-child {
+                    @apply text-[#FFFFFFBF];
+                  }
+
+                  &:last-child {
+                    @apply text-[#FFFFFF80];
+                  }
                 }
               }
             }

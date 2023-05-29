@@ -1,44 +1,95 @@
-.main {
-  @apply flex flex-col gap-[100px] w-screen items-center justify-center p-[20px];
-  animation: 0.5s fadeIn ease-in-out;
+@media (max-width: 700px) {
+  .main {
+    @apply flex flex-col gap-[100px] w-screen items-center justify-center p-[20px];
+    animation: 0.5s fadeIn ease-in-out;
 
-  > div {
-    &:first-child {
-      @apply flex flex-col gap-[40px];
+    > div {
+      &:first-child {
+        @apply flex flex-col gap-[40px];
 
-      > h1 {
-        @apply font-extrabold text-white text-[64px] text-center;
+        > h1 {
+          @apply font-extrabold text-white text-[32px] text-center;
+        }
+
+        > p {
+          @apply font-semibold text-[#FFFFFF80] text-[18px] text-center;
+        }
       }
 
-      > p {
-        @apply font-semibold text-[#FFFFFF80] text-[32px] text-center;
+      &:last-child {
+        @apply flex flex-col gap-[20px] justify-center items-center;
+
+        > button {
+          @apply bg-white text-black font-bold text-[16px] leading-[12px] rounded-[12px] transition-all;
+          width: fit-content;
+          height: fit-content;
+          padding: 20px 60px;
+
+          &:hover {
+            @apply bg-transparent text-white;
+            outline: 1px solid #fff;
+          }
+        }
+
+        > a {
+          @apply font-semibold text-[#FFFFFF80] text-[16px] text-center cursor-pointer transition-all;
+
+          &:hover {
+            @apply text-[#FFFFFFBF];
+          }
+
+          &:active {
+            @apply text-white;
+          }
+        }
       }
     }
+  }
+}
 
-    &:last-child {
-      @apply flex flex-col gap-[20px] justify-center items-center;
+@media (min-width: 700px) {
+  .main {
+    @apply flex flex-col gap-[100px] w-screen items-center justify-center p-[20px];
+    animation: 0.5s fadeIn ease-in-out;
 
-      > button {
-        @apply bg-white text-black font-bold text-[16px] leading-[12px] rounded-[12px] transition-all;
-        width: fit-content;
-        height: fit-content;
-        padding: 20px 60px;
+    > div {
+      &:first-child {
+        @apply flex flex-col gap-[40px];
 
-        &:hover {
-          @apply bg-transparent text-white;
-          outline: 1px solid #fff;
+        > h1 {
+          @apply font-extrabold text-white text-[64px] text-center;
+        }
+
+        > p {
+          @apply font-semibold text-[#FFFFFF80] text-[32px] text-center;
         }
       }
 
-      > a {
-        @apply font-semibold text-[#FFFFFF80] text-[16px] text-center cursor-pointer transition-all;
+      &:last-child {
+        @apply flex flex-col gap-[20px] justify-center items-center;
 
-        &:hover {
-          @apply text-[#FFFFFFBF];
+        > button {
+          @apply bg-white text-black font-bold text-[16px] leading-[12px] rounded-[12px] transition-all;
+          width: fit-content;
+          height: fit-content;
+          padding: 20px 60px;
+
+          &:hover {
+            @apply bg-transparent text-white;
+            outline: 1px solid #fff;
+          }
         }
 
-        &:active {
-          @apply text-white;
+        > a {
+          @apply font-semibold text-[#FFFFFF80] text-[16px] text-center cursor-pointer transition-all;
+
+          &:hover {
+            @apply text-[#FFFFFFBF];
+          }
+
+          &:active {
+            @apply text-white;
+          }
         }
       }
     }

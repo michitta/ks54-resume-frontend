@@ -125,6 +125,9 @@ export default function Cabinet() {
                                     height={60}
                                     alt="User head"
                                     src={icon}
+                                    onError={() => {
+                                        setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png?lastModified=${Date.now()}`);
+                                    }}
                                     quality={100}
                                     priority={true}
                                     className="rounded-full"
@@ -527,7 +530,7 @@ export default function Cabinet() {
                             <textarea
                                 className={errors.workExperience ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.workExperience : ""}
-                                maxLength={255}
+                                maxLength={800}
                                 draggable={false}
                                 {...register(`workExperience`, { required: true })}
                             />
