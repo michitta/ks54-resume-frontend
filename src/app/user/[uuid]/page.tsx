@@ -35,7 +35,7 @@ export default async function User({ params }: any) {
                                 priority
                             ></Image>
                             <span className='flex flex-col'>
-                                <p className='text-[20px] text-white'>{student.fullName}</p>
+                                <h1>{student.fullName}</h1>
                                 <p>Профессия: {student.profession}</p>
                             </span>
                         </div>

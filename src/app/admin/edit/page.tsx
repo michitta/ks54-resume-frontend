@@ -22,7 +22,7 @@ export default function AdminEdit() {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         mode: 'onChange', values: {
-            fullName: student?.fullName ? student?.fullName : user?.fullName,
+            fullName: student?.fullName,
             profession: student?.profession,
             birthday: student?.birthday,
             phone: student?.phone,
@@ -139,15 +139,15 @@ export default function AdminEdit() {
                                 <input
                                     type="text"
                                     className={errors.fullName ? clsx(styles.input, styles.error) : styles.input}
-                                    placeholder={student?.fullName ? student?.fullName : user.fullName}
-                                    style={{ width: getWidth(student?.fullName ? student?.fullName.length + 2 : user.fullName.length + 2) }}
+                                    placeholder={student?.fullName}
+                                    style={{ width: getWidth(student?.fullName.length + 3) }}
                                     maxLength={40}
                                     {...register(`fullName`, {
                                         required: false,
                                         onChange: (e) => {
                                             let value = e.target.value;
                                             if (value == 0) value = e.target.placeholder
-                                            const width = getWidth(value.toString().length);
+                                            const width = getWidth(value.toString().length + 2);
                                             e.target.style.width = width;
                                         },
                                     })}

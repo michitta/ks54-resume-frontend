@@ -142,7 +142,7 @@ export default function Cabinet() {
                                     type="text"
                                     className={errors.fullName ? clsx(styles.input, styles.error) : styles.input}
                                     placeholder={student?.fullName ? student?.fullName : user.fullName}
-                                    style={{ width: getWidth(student?.fullName ? student?.fullName.length + 2 : user.fullName.length + 2) }}
+                                    style={{ width: getWidth(student?.fullName ? student?.fullName.length + 3 : user.fullName.length + 3) }}
                                     maxLength={20}
                                     disabled={true}
                                     {...register(`fullName`, {
@@ -150,7 +150,7 @@ export default function Cabinet() {
                                         onChange: (e) => {
                                             let value = e.target.value;
                                             if (value == 0) value = e.target.placeholder
-                                            const width = getWidth(value.toString().length);
+                                            const width = getWidth(value.toString().length + 2);
                                             e.target.style.width = width;
                                         },
                                     })}
