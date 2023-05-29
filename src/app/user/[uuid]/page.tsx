@@ -16,7 +16,7 @@ export default async function User({ params }: any) {
         <main className={styles.main} >
             <header>
                 <Link href={`/`}>На главную</Link>
-                <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 1L1 21" stroke="#333333" strokeLinecap="round" />
                 </svg>
                 <p>Просмотр резюме - {student.fullName}</p>
@@ -82,8 +82,12 @@ export default async function User({ params }: any) {
                             </span>
                         </div>
                     </div>
-                    <svg width="100%" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1H1379" stroke="#333333" strokeLinecap="round" />
+                    <svg style={{
+                        width: '100%',
+                        height: '1px',
+                        border: '1px solid #333333',
+                        borderRadius: '10px',
+                    }} viewBox="0 0 1052 2" stroke='#333333' xmlns="http://www.w3.org/2000/svg">
                     </svg>
                     <div>
                         <div>

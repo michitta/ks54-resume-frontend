@@ -34,8 +34,13 @@
 
       &:first-child {
         @apply flex flex-col gap-[20px];
+
         > div {
           @apply flex w-full justify-between gap-[20px];
+
+          > svg {
+            @apply w-full h-[20px];
+          }
 
           > div {
             @apply flex flex-col gap-[2px] justify-center;
@@ -84,7 +89,7 @@
               @apply flex flex-col gap-[10px];
 
               > p {
-                @apply font-bold text-[16px];
+                @apply font-bold text-[16px]  whitespace-pre-wrap;
 
                 &:first-child {
                   @apply text-[#FFFFFFBF];

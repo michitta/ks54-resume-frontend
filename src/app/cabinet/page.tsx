@@ -319,8 +319,12 @@ export default function Cabinet() {
                             /></p>
                         </div>
                     </div>
-                    <svg width="100%" height="2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1H1379" stroke="#333333" strokeLinecap="round" />
+                    <svg style={{
+                        width: '100%',
+                        height: '1px',
+                        border: '1px solid #333333',
+                        borderRadius: '10px',
+                    }} viewBox="0 0 1052 2" stroke='#333333' xmlns="http://www.w3.org/2000/svg">
                     </svg>
                     <div>
                         <div>
@@ -461,7 +465,7 @@ export default function Cabinet() {
                             <textarea
                                 className={errors.launguages ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.socialSkills : ""}
-                                maxLength={100}
+                                maxLength={255}
                                 {...register(`launguages`, { required: true })}
                             />
                         </span>
@@ -487,7 +491,7 @@ export default function Cabinet() {
                             <textarea
                                 className={errors.educations ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.educations : ""}
-                                maxLength={100}
+                                maxLength={255}
                                 {...register(`educations`, { required: true })}
                             />
                         </span>
@@ -523,7 +527,7 @@ export default function Cabinet() {
                             <textarea
                                 className={errors.workExperience ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.workExperience : ""}
-                                maxLength={400}
+                                maxLength={255}
                                 draggable={false}
                                 {...register(`workExperience`, { required: true })}
                             />
@@ -533,7 +537,7 @@ export default function Cabinet() {
                             <textarea
                                 className={errors.awards ? clsx(styles.textarea, styles.error) : styles.textarea}
                                 placeholder={student ? student.awards : ""}
-                                maxLength={400}
+                                maxLength={255}
                                 draggable={false}
                                 {...register(`awards`, { required: true })}
                             />
