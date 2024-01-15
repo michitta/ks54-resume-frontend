@@ -11,6 +11,6 @@ export default function NotFound() {
     }, [])
 
     return (
-        <h1></h1>
+        <h1>Резюме не найдено</h1>
     )
 }
