@@ -3,13 +3,8 @@
 import { useUniversalContext } from '@/components/universal.context';
 import styles from '@/styles/auth.module.scss';
 import clsx from 'clsx';
-import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-
-export const metadata: Metadata = {
-    title: "Регистрация аккаунт"
-};
 
 export default function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm();

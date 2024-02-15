@@ -5,11 +5,6 @@ import { AsyncSelector } from '@/components/selector';
 import styles from '@/styles/admin.module.scss';
 import { useRouter } from 'next/navigation';
 import { adminService } from '@/services/admin.service';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: "Поиск студента по фамилии"
-};
 
 export default function Admin() {
     const router = useRouter();

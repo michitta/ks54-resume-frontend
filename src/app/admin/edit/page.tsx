@@ -7,18 +7,20 @@ import { error, success } from '@/utils/toaster';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import Image from 'next/image';
-import { ChangeEvent, useCallback, useState } from 'react';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: "Панель редактирования резюме"
-};
+import Image, { StaticImageData } from 'next/image';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import undefinedImg from '../../../undefined.png';
 
 export default function AdminEdit() {
     const router = useRouter();
 
     const { user, student, setStudent, logout, isLoading } = useUniversalContext();
+
+    const [icon, setIcon] = useState<string | StaticImageData>(undefinedImg);
+
+    useEffect(() => {
+        setIcon(`http://localhost:9000/images/${student?.imageHash}.png`)
+    }, [student])
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         mode: 'onChange', values: {
@@ -53,8 +55,6 @@ export default function AdminEdit() {
         }
     });
 
-    const [icon, setIcon] = useState(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${student?.lastModified}`);
-
     const onSubmit = async (data: any) => {
         await adminService.setStudent(student!.uuid, data);
         reset();
@@ -78,8 +78,8 @@ export default function AdminEdit() {
             let formData = new FormData();
             formData.append("file", item);
             await adminService.changeIcon(student!.uuid, formData);
-            setIcon(`https://cdn.vaultcommunity.net/hackaton/${student?.uuid}.png?lastModified=${Date.now()}`);
-            router.refresh();
+            await getStudent();
+            event.target.value = "";
         }, [student]
     );
 
@@ -102,7 +102,7 @@ export default function AdminEdit() {
                 <button type="button" onClick={() => logout()}>Выйти</button>
                 <button type="button" onClick={() => {
                     navigator.clipboard
-                        .writeText('https://owocon.eu.org/user/' + student.uuid)
+                        .writeText('http://localhost:3000/user/' + student.uuid)
                         .then(() => success("Ссылка на резюме скопирована в буфер обмена!"));
                 }}>Поделиться</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -120,9 +120,6 @@ export default function AdminEdit() {
                                     height={60}
                                     alt="User head"
                                     src={icon}
-                                    onError={() => {
-                                        setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png`)
-                                    }}
                                     className="rounded-full"
                                     quality={100}
                                     priority

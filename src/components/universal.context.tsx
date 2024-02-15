@@ -48,6 +48,7 @@ export interface IStudent {
     workByProfession?: string;
     workFunctions?: string;
     lastModified: Date;
+    imageHash?: string;
 }
 
 type UniversalContextData = {

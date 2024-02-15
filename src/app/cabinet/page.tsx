@@ -6,19 +6,21 @@ import styles from '@/styles/adminEdit.module.scss';
 import { error, success } from '@/utils/toaster';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import Image from 'next/image';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import Image, { StaticImageData } from 'next/image';
 import { useForm } from 'react-hook-form';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: "Личный кабинет"
-};
+import undefined from '../../undefined.png';
 
 export default function Cabinet() {
     const router = useRouter();
 
     const { user, student, setStudent, logout, isLoading, reFetch } = useUniversalContext();
+
+    const [icon, setIcon] = useState<string | StaticImageData>(undefined);
+
+    useEffect(() => {
+        setIcon(`http://localhost:9000/images/${student?.imageHash}.png`)
+    }, [student])
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         mode: 'onChange', values: {
@@ -53,8 +55,6 @@ export default function Cabinet() {
         }
     });
 
-    const [icon, setIcon] = useState<string>("");
-
     const onSubmit = async (data: any) => {
         await usersService.setStudent(data);
         reset();
@@ -70,7 +70,6 @@ export default function Cabinet() {
     const getStudent = async () => {
         setStudent(null);
         setStudent(await usersService.getStudent(user!.uuid));
-        setIcon(`https://cdn.vaultcommunity.net/hackaton/${user?.uuid}.png?lastModified=${Date.now()}`)
     }
 
     const onChangeIcon = useCallback(
@@ -85,7 +84,7 @@ export default function Cabinet() {
             formData.append("file", item);
             await usersService.changeIcon(formData);
             await getStudent();
-            setIcon(`https://cdn.vaultcommunity.net/hackaton/${user?.uuid}.png?lastModified=${Date.now()}`);
+            event.target.value = "";
         }, [user]
     );
 
@@ -107,7 +106,7 @@ export default function Cabinet() {
                 <button type="button" onClick={() => logout()}>Выйти</button>
                 <button type="button" onClick={() => {
                     navigator.clipboard
-                        .writeText('https://owocon.eu.org/user/' + user.uuid)
+                        .writeText('http://localhost:3000/user/' + user.uuid)
                         .then(() => success("Ссылка на резюме скопирована в буфер обмена!"));
                 }}>Поделиться</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -125,9 +124,6 @@ export default function Cabinet() {
                                     height={60}
                                     alt="User head"
                                     src={icon}
-                                    onError={() => {
-                                        setIcon(`https://cdn.vaultcommunity.net/hackaton/undefined.png?lastModified=${Date.now()}`);
-                                    }}
                                     quality={100}
                                     priority={true}
                                     className="rounded-full"

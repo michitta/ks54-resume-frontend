@@ -3,13 +3,8 @@
 import { useUniversalContext } from '@/components/universal.context';
 import styles from '@/styles/auth.module.scss';
 import clsx from 'clsx';
-import { Metadata } from 'next';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-
-export const metadata: Metadata = {
-    title: "Восстановление доступа"
-};
 
 export default function ForgotPass() {
     const { register, handleSubmit, formState: { errors } } = useForm();

@@ -3,6 +3,7 @@ import styles from '@/styles/user.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import undefinedImg from '../../../undefined.png';
 
 const fetchData = async (uuid: string) => {
     return await usersService.getStudent(uuid);
@@ -29,7 +30,7 @@ export default async function User({ params }: any) {
                                 width={60}
                                 height={60}
                                 alt="User head"
-                                src={`https://cdn.vaultcommunity.net/hackaton/${student.uuid}.png?lastModified=${student.lastModified}`}
+                                src={`http://localhost:9000/images/${student?.imageHash}.png` || undefinedImg}
                                 className="rounded-full"
                                 quality={100}
                                 priority

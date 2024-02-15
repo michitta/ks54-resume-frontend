@@ -3,10 +3,10 @@ const nextConfig = {
   images: {
       remotePatterns: [
         {
-          protocol: 'https',
-          hostname: 'cdn.vaultcommunity.net',
-          port: '',
-          pathname: '/hackaton/*',
+          protocol: 'http',
+          hostname: 'localhost',
+          port: '9000',
+          pathname: '/images/*',
         },
       ],
     },

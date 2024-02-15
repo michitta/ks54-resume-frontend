@@ -2,7 +2,7 @@ import api from "../utils/api";
 
 export const usersService = {
   async getStudent(uuid: string) {
-    return fetch(`https://owocon.eu.org/api/v1/users/${uuid}`, {
+    return fetch(`http://localhost:3003/api/v1/users/${uuid}`, {
       next: {
         revalidate: 60,
       },
