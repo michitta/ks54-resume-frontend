@@ -68,7 +68,7 @@ export default function Register() {
                             <span></span>
                         ) : "Создать аккаунт"}</button>
                         <span>
-                            <a onClick={() => router.push('auth/login')}>У Вас уже есть аккаунт?</a>
+                            <a onClick={() => router.push('login')}>У Вас уже есть аккаунт?</a>
                         </span>
                     </div>
                 </div>

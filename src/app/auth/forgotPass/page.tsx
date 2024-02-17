@@ -56,7 +56,7 @@ export default function ForgotPass() {
                             <span></span>
                         ) : "Восстановить доступ"}</button>
                         <span>
-                            <a onClick={() => router.push('auth/login')}>Вспомнили пароль?</a>
+                            <a onClick={() => router.push('login')}>Вспомнили пароль?</a>
                         </span>
                     </div>
                 </div>

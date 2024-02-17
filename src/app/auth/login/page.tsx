@@ -56,8 +56,8 @@ export default function LogIn() {
                             <span></span>
                         ) : "Войти в аккаунт"}</button>
                         <span>
-                            <a onClick={() => router.push('auth/register')}>У Вас нет аккаунта?</a>
-                            <a onClick={() => router.push('auth/forgotPass')}>Забыли пароль?</a>
+                            <a onClick={() => router.push('register')}>У Вас нет аккаунта?</a>
+                            <a onClick={() => router.push('forgotPass')}>Забыли пароль?</a>
                         </span>
                     </div>
                 </div>
