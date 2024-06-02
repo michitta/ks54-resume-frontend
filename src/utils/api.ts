@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { error, success } from "./toaster";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:3000/api/v1",
+  baseURL: "http://127.0.0.1:3003/api/v1",
   withCredentials: true,
 });
 
