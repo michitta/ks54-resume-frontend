@@ -30,11 +30,11 @@ export default async function User({ params }: any) {
                                 width={60}
                                 height={60}
                                 alt="User head"
-                                src={`http://localhost:9000/images/${student?.imageHash}.png` || undefinedImg}
+                                src={`http://172.20.0.2:9000/images/${student?.imageHash}.png` || undefinedImg}
                                 className="rounded-full"
                                 quality={100}
                                 priority
-                            ></Image>
+                            />
                             <span className='flex flex-col'>
                                 <h1>{student.fullName}</h1>
                                 <p>Профессия: {student.profession}</p>

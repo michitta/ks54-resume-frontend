@@ -2,13 +2,19 @@ import api from "../utils/api";
 
 export const usersService = {
   async getStudent(uuid: string) {
-    return fetch(`http://localhost:3003/api/v1/users/${uuid}`, {
+    return fetch(`http://172.20.0.3:3003/api/v1/users/${uuid}`, {
       next: {
         revalidate: 60,
       },
     }).then((res) => (res.ok ? res.json() : null));
   },
-
+  async getStudentClient(uuid: string) {
+    return fetch(`http://127.0.0.1:3003/api/v1/users/${uuid}`, {
+      next: {
+        revalidate: 60,
+      },
+    }).then((res) => (res.ok ? res.json() : null));
+  },
   async setStudent(data: any) {
     return api
       .post(`/users`, {

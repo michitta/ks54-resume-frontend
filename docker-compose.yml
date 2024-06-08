@@ -7,4 +7,12 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     restart: always
-    network_mode: bridge
+    networks:
+      backend:
+        ipv4_address: 172.20.0.5
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
+    external: true

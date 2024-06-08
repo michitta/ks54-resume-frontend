@@ -19,7 +19,7 @@ export default function AdminEdit() {
     const [icon, setIcon] = useState<string | StaticImageData>(undefinedImg);
 
     useEffect(() => {
-        setIcon(`http://localhost:9000/images/${student?.imageHash}.png`)
+        setIcon(`http://172.20.0.2:9000/images/${student?.imageHash}.png`)
     }, [student])
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -102,7 +102,7 @@ export default function AdminEdit() {
                 <button type="button" onClick={() => logout()}>Выйти</button>
                 <button type="button" onClick={() => {
                     navigator.clipboard
-                        .writeText('http://localhost:3000/user/' + student.uuid)
+                        .writeText('http://127.0.0.1:3000/user/' + student.uuid)
                         .then(() => success("Ссылка на резюме скопирована в буфер обмена!"));
                 }}>Поделиться</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">

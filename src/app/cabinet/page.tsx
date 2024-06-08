@@ -14,12 +14,12 @@ import undefined from '../../undefined.png';
 export default function Cabinet() {
     const router = useRouter();
 
-    const { user, student, setStudent, logout, isLoading, reFetch } = useUniversalContext();
+    const { user, student, setStudent, logout, isLoading } = useUniversalContext();
 
     const [icon, setIcon] = useState<string | StaticImageData>(undefined);
 
     useEffect(() => {
-        setIcon(`http://localhost:9000/images/${student?.imageHash}.png`)
+        student?.imageHash && setIcon(`http://172.20.0.2:9000/images/${student?.imageHash}.png`)
     }, [student])
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -69,7 +69,7 @@ export default function Cabinet() {
 
     const getStudent = async () => {
         setStudent(null);
-        setStudent(await usersService.getStudent(user!.uuid));
+        setStudent(await usersService.getStudentClient(user!.uuid));
     }
 
     const onChangeIcon = useCallback(
@@ -106,7 +106,7 @@ export default function Cabinet() {
                 <button type="button" onClick={() => logout()}>Выйти</button>
                 <button type="button" onClick={() => {
                     navigator.clipboard
-                        .writeText('http://localhost:3000/user/' + user.uuid)
+                        .writeText('http://127.0.0.1:3000/user/' + user.uuid)
                         .then(() => success("Ссылка на резюме скопирована в буфер обмена!"));
                 }}>Поделиться</button>
                 <svg width="2" height="22" viewBox="0 0 2 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,6 +124,7 @@ export default function Cabinet() {
                                     height={60}
                                     alt="User head"
                                     src={icon}
+                                    onError={() => setIcon(undefined)}
                                     quality={100}
                                     priority={true}
                                     className="rounded-full"
